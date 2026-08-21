@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#7c3aed">
+<title>AI 学习工作台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --g1:#7c3aed; --g2:#2563eb;
+  --grad:linear-gradient(135deg,#7c3aed 0%,#2563eb 100%);
+  --grad-soft:linear-gradient(135deg,#a78bfa 0%,#60a5fa 100%);
+  --bg:#F4F2FD; --card:#FFFFFF; --text:#1E1B4B; --muted:#6D6A8A;
+  --line:#E6E1F7; --soft:#EDE9FE; --soft2:#F5F3FF;
+  --accent:#F97316; --accent2:#EA580C;
+  --ok:#22C55E; --no:#EF4444; --warn:#F59E0B;
+  --s4:4px; --s8:8px; --s12:12px; --s16:16px; --s20:20px; --s24:24px; --s32:32px;
+  --r8:8px; --r12:12px; --r16:16px; --r20:20px; --r24:24px;
+  --shadow:0 4px 16px rgba(124,58,237,.08);
+  --shadow-lg:0 8px 28px rgba(124,58,237,.15);
+  --font:'Nunito',system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:16px;line-height:1.6;min-height:100vh}
+.wrap{max-width:680px;margin:0 auto;padding:0 var(--s16) var(--s32)}
+button{font-family:var(--font);cursor:pointer;border:none;background:none;color:inherit}
+.mono{font-family:var(--mono)}
+
+/* ====== header ====== */
+header.top{position:sticky;top:0;z-index:20;background:var(--grad);color:#fff;
+  border-bottom:none}
+.top-in{max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;
+  padding:var(--s12) var(--s16);gap:var(--s12)}
+.brand{display:flex;align-items:center;gap:var(--s8);min-width:0}
+.brand .logo{width:30px;height:30px;border-radius:var(--r8);background:rgba(255,255,255,.2);color:#fff;
+  display:grid;place-items:center;font-weight:800;font-size:14px;flex:none;backdrop-filter:blur(4px)}
+.brand b{font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.right{display:flex;align-items:center;gap:var(--s8)}
+.lv-chip{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.18);
+  padding:4px 10px;border-radius:99px;font-family:var(--mono);font-size:12px;font-weight:600;backdrop-filter:blur(4px)}
+.xp-chip{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.18);
+  padding:4px 10px;border-radius:99px;font-family:var(--mono);font-size:12px;font-weight:600;backdrop-filter:blur(4px)}
+.iconbtn{width:36px;height:36px;border-radius:var(--r8);display:grid;place-items:center;color:#fff;
+  background:rgba(255,255,255,.12);font-size:18px}
+.iconbtn:active{background:rgba(255,255,255,.25)}
+
+.top-bar-wrap{max-width:680px;margin:0 auto;padding:0 var(--s16) var(--s10)}
+.pbar{height:5px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden}
+.pbar i{display:block;height:100%;background:#fff;border-radius:99px;transition:width .4s}
+
+/* ====== home hero ====== */
+.hero{margin-top:var(--s16);background:var(--grad);color:#fff;border-radius:var(--r24);
+  padding:var(--s24);box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;
+  background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%);border-radius:50%}
+.h-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s8);position:relative}
+.h-lv{font-family:var(--mono);font-size:14px;font-weight:700;background:rgba(255,255,255,.22);
+  padding:4px 12px;border-radius:99px;backdrop-filter:blur(4px)}
+.h-xp{font-family:var(--mono);font-size:13px;font-weight:600;display:flex;align-items:center;gap:4px}
+.hero h1{margin:var(--s12) 0 var(--s4);font-size:22px;font-weight:900;letter-spacing:.5px;line-height:1.3;position:relative}
+.hero p{margin:0 0 var(--s16);font-size:13px;opacity:.9;position:relative}
+.h-next{position:relative}
+.h-next-bar{height:6px;background:rgba(255,255,255,.2);border-radius:99px;overflow:hidden;margin-bottom:6px}
+.h-next-bar i{display:block;height:100%;background:linear-gradient(90deg,#FBBF24,#F97316);border-radius:99px}
+.h-next span{font-size:12px;opacity:.92;display:flex;justify-content:space-between;align-items:center}
+.h-next b{font-family:var(--mono)}
+
+/* ====== daily card ====== */
+.daily{margin-top:var(--s12);background:var(--card);border-radius:var(--r20);
+  padding:var(--s16);box-shadow:var(--shadow);border:1px solid var(--line)}
+.d-head{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px}
+.d-date{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:600}
+.d-bar{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;margin:var(--s12) 0 6px}
+.d-bar i{display:block;height:100%;background:var(--grad);border-radius:99px;transition:width .4s}
+.d-goal{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:var(--s12)}
+.d-chips{display:flex;flex-wrap:wrap;gap:var(--s8)}
+.chip{font-size:12px;font-weight:700;background:var(--soft2);color:#5B21B6;
+  padding:5px 10px;border-radius:99px;font-family:var(--mono)}
+.chip.ok{background:#DCFCE7;color:#166534}
+.chip.ex{background:#FEF3C7;color:#92400E}
+.d-weak{margin-top:var(--s12);padding-top:var(--s12);border-top:1px dashed var(--line);
+  font-size:13px;color:#9F1239;font-weight:700}
+.d-weak b{color:#9F1239}
+.d-weak i{font-style:normal;background:#FECDD3;padding:2px 8px;border-radius:99px;margin-right:4px;display:inline-block;margin-bottom:4px}
+
+/* ====== exam card ====== */
+.exam-card{margin-top:var(--s12);background:linear-gradient(135deg,#FEF3C7 0%,#FFEDD5 100%);
+  border:2px dashed #F97316;border-radius:var(--r20);padding:var(--s16);
+  display:flex;align-items:center;gap:var(--s12);text-align:left;width:100%;box-shadow:var(--shadow)}
+.exam-card:active{transform:scale(.99)}
+.e-ic{width:48px;height:48px;border-radius:var(--r16);background:var(--accent);
+  color:#fff;display:grid;place-items:center;font-size:24px;flex:none;box-shadow:0 4px 12px rgba(249,115,22,.35)}
+.e-info h3{margin:0 0 2px;font-size:15px;font-weight:800;color:#7C2D12}
+.e-info p{margin:0;font-size:12px;color:#9A3412;font-weight:600}
+.e-arrow{color:#9A3412;font-size:22px;margin-left:auto;font-weight:700}
+
+/* ====== mode grid ====== */
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s8);margin-top:var(--s12)}
+.mode-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r16);padding:var(--s12) var(--s8);text-align:center;box-shadow:var(--shadow);transition:transform .05s}
+.mode-card:active{transform:scale(.97)}
+.mode-card .m-ic{font-size:26px;display:block;margin-bottom:2px}
+.mode-card h3{margin:0;font-size:14px;font-weight:900}
+.mode-card p{margin:2px 0 0;font-size:10px;color:var(--muted);font-weight:700;line-height:1.45}
+.m-read{border-top:3px solid #7c3aed}
+.m-quiz{border-top:3px solid #2563eb}
+.m-exam{border-top:3px solid var(--accent)}
+
+.path-chips{display:flex;gap:var(--s8);overflow-x:auto;padding:2px 2px 6px;-webkit-overflow-scrolling:touch}
+.path-chip{flex:none;display:flex;align-items:center;gap:6px;background:var(--card);border:1.5px solid var(--line);border-radius:99px;padding:5px 12px 5px 5px;font-weight:800;font-size:12px;box-shadow:var(--shadow)}
+.path-chip .pc-no{width:24px;height:24px;border-radius:99px;background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;display:grid;place-items:center;font-family:var(--mono);font-size:11px;flex:none}
+.path-chip.done{border-color:var(--ok)}
+.path-chip.done .pc-no{background:var(--ok)}
+.path-chip.try{border-color:var(--warn)}
+
+/* ====== section title ====== */
+.sec-title{display:flex;align-items:center;justify-content:space-between;gap:var(--s8);margin:var(--s20) 0 var(--s12)}
+.sec-title h2{font-size:15px;font-weight:800;margin:0}
+.sec-title span{font-size:11px;color:var(--muted);font-family:var(--mono);font-weight:700}
+
+/* ====== chapter cards ====== */
+.ch-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r20);
+  margin-bottom:var(--s12);overflow:hidden;box-shadow:var(--shadow);transition:transform .05s}
+.ch-card:active{transform:scale(.99)}
+.ch-card.locked{opacity:.65;background:#FAFAFA;box-shadow:none}
+.ch-card.done{border-color:var(--ok)}
+.ch-head{display:flex;align-items:flex-start;gap:var(--s12);padding:var(--s16);cursor:pointer}
+.ch-num{width:44px;height:44px;border-radius:var(--r12);color:#fff;display:grid;
+  place-items:center;font-weight:900;font-size:18px;flex:none;
+  box-shadow:0 4px 12px rgba(0,0,0,.15);font-family:var(--mono)}
+.ch-info{flex:1;min-width:0}
+.ch-top{display:flex;align-items:center;justify-content:space-between;gap:var(--s8)}
+.ch-top h3{margin:0;font-size:15px;font-weight:800;line-height:1.3}
+.badge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:99px;flex:none;font-family:var(--mono)}
+.badge.lock{background:#F1F5F9;color:#64748B}
+.badge.go{background:var(--soft);color:#5B21B6}
+.badge.ok{background:#DCFCE7;color:#166534}
+.ch-info p{margin:4px 0 0;color:var(--muted);font-size:12px;font-weight:600;line-height:1.5}
+.ch-meta{display:flex;align-items:center;justify-content:space-between;margin-top:var(--s8);gap:var(--s8)}
+.ch-meta .m{font-size:11px;color:var(--muted);font-weight:700;font-family:var(--mono)}
+.mini-bar{flex:1;height:5px;background:var(--soft);border-radius:99px;overflow:hidden;max-width:100px;margin-left:auto}
+.mini-bar i{display:block;height:100%;background:var(--ok)}
+.ch-actions{display:flex;gap:var(--s8);padding:0 var(--s16) var(--s16);border-top:1px dashed var(--line);padding-top:var(--s12)}
+.btn-mini{flex:1;min-height:42px;border-radius:var(--r12);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:4px;transition:filter .15s}
+.btn-mini:active{filter:brightness(.94)}
+.btn-mini.w{background:#fff;color:var(--g1);border:1.5px solid var(--soft)}
+.btn-mini.g{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(124,58,237,.3)}
+.btn-mini.o{background:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(249,115,22,.3)}
+.ch-lock{text-align:center;padding:var(--s12);color:var(--muted);font-size:12px;font-weight:700;background:var(--soft2)}
+
+/* ====== lesson ====== */
+.lesson{background:var(--card);border:1px solid var(--line);border-radius:var(--r20);
+  padding:var(--s24);margin-top:var(--s16);box-shadow:var(--shadow)}
+.lesson .kicker{font-family:var(--mono);font-size:11px;color:var(--g1);font-weight:700;letter-spacing:.5px}
+.lesson h2{font-size:20px;font-weight:900;margin:var(--s4) 0 var(--s4);line-height:1.3}
+.page-bar{display:flex;align-items:center;justify-content:space-between;gap:var(--s8);
+  margin:var(--s4) 0 var(--s16);padding-bottom:var(--s12);border-bottom:1px dashed var(--line)}
+.page-bar .pgs{font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:700}
+.page-bar .pgs b{color:var(--g1);font-size:15px}
+.toc-btn{font-size:12px;color:var(--g1);font-weight:800;display:flex;align-items:center;gap:4px;background:var(--soft);padding:5px 10px;border-radius:99px}
+.page-title{font-size:16px;font-weight:800;color:var(--g1);margin:0 0 var(--s12);padding:6px 12px;background:var(--soft);border-radius:var(--r8);display:inline-block}
+.lesson-body h4{font-size:14px;font-weight:800;margin:var(--s20) 0 var(--s8);color:var(--g1)}
+.lesson-body p{margin:0 0 var(--s12);font-size:14.5px;color:#3A2F6B;line-height:1.7}
+.lesson-body ul,.lesson-body ol{margin:0 0 var(--s12);padding-left:var(--s20)}
+.lesson-body li{margin-bottom:var(--s4);font-size:14.5px;color:#3A2F6B;line-height:1.7}
+.lesson-body li b{color:var(--g1)}
+.note{background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-left:4px solid var(--accent);padding:var(--s12) var(--s16);
+  border-radius:0 var(--r12) var(--r12) 0;margin:var(--s16) 0;font-size:13.5px;color:#7C2D12;line-height:1.6}
+.note b{color:#7C2D12}
+.code-block{background:#1E1B4B;color:#C4B5FD;border-radius:var(--r12);padding:var(--s12) var(--s16);
+  margin:var(--s12) 0;font-family:var(--mono);font-size:12.5px;overflow-x:auto;white-space:pre-wrap;line-height:1.6}
+.table-wrap{overflow-x:auto;margin:var(--s12) 0;border-radius:var(--r8);border:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:13px;background:#fff}
+th,td{border-bottom:1px solid var(--line);padding:var(--s8) var(--s12);text-align:left}
+tr:last-child td{border-bottom:none}
+th{background:var(--soft2);font-weight:800;color:var(--g1);font-size:12px}
+
+/* lesson nav */
+.lesson-nav{display:flex;align-items:center;justify-content:space-between;gap:var(--s8);margin-top:var(--s20)}
+.lesson-nav .nav-btn{display:inline-flex;align-items:center;gap:var(--s4);min-height:42px;padding:0 var(--s16);
+  border-radius:var(--r12);font-size:13px;font-weight:800;transition:filter .15s}
+.lesson-nav .nav-btn:active{filter:brightness(.94)}
+.lesson-nav .nav-btn.pri{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(124,58,237,.3)}
+.lesson-nav .nav-btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--text)}
+.lesson-nav .nav-btn:disabled{opacity:.4}
+.lesson-nav .dots{display:flex;gap:var(--s4);align-items:center}
+.lesson-nav .dot{width:7px;height:7px;border-radius:99px;background:var(--line)}
+.lesson-nav .dot.on{background:var(--g1);width:18px}
+
+.toc-item{display:flex;align-items:center;gap:var(--s8);width:100%;text-align:left;padding:var(--s12) var(--s16);
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r12);margin-bottom:var(--s6);
+  font-size:14px;font-weight:700;transition:border-color .15s}
+.toc-item:active{background:var(--soft2)}
+.toc-item .toc-no{font-family:var(--mono);font-size:11px;color:var(--g1);flex:none;width:24px;font-weight:800}
+.toc-item.cur{border-color:var(--g1);background:var(--soft2)}
+
+/* ====== question card ====== */
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r20);
+  padding:var(--s24);margin-top:var(--s16);box-shadow:var(--shadow)}
+.qmeta{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);
+  font-size:11px;color:var(--muted);margin-bottom:var(--s8);font-weight:700}
+.qtype{color:var(--g1);font-weight:800;background:var(--soft);padding:3px 10px;border-radius:99px}
+.qcard h3{font-size:17px;font-weight:800;margin:0 0 var(--s8);line-height:1.5}
+.qcase{background:var(--soft2);border-radius:var(--r12);padding:var(--s12) var(--s16);
+  font-size:13.5px;color:#3A2F6B;margin-bottom:var(--s16);border-left:3px solid var(--g1)}
+.opts{display:flex;flex-direction:column;gap:var(--s8);margin:var(--s16) 0}
+.opt{display:flex;align-items:center;gap:var(--s12);min-height:54px;padding:var(--s12) var(--s16);
+  border:1.5px solid var(--line);border-radius:var(--r12);font-size:14.5px;text-align:left;background:#fff;font-weight:600;transition:all .15s}
+.opt:active{background:var(--soft2)}
+.opt .key{width:28px;height:28px;border-radius:var(--r8);background:var(--soft);display:grid;
+  place-items:center;font-family:var(--mono);font-size:12px;font-weight:800;color:var(--g1);flex:none}
+.opt.sel{border-color:var(--g1);background:var(--soft2);box-shadow:0 0 0 3px rgba(124,58,237,.1)}
+.opt.sel .key{background:var(--g1);color:#fff}
+.opt.right{border-color:var(--ok);background:#DCFCE7}
+.opt.right .key{background:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--no);background:#FEE2E2}
+.opt.wrong .key{background:var(--no);color:#fff}
+.opt:disabled{cursor:default}
+.ta{width:100%;min-height:120px;border:1.5px solid var(--line);border-radius:var(--r12);
+  padding:var(--s12) var(--s16);font-family:var(--font);font-size:14.5px;resize:vertical;background:#fff;color:var(--text);font-weight:600}
+.ta:focus{outline:none;border-color:var(--g1)}
+
+.feedback{margin-top:var(--s16);padding:var(--s12) var(--s16);border-radius:var(--r12);font-size:13.5px;line-height:1.6;font-weight:600}
+.fb-ok{background:#DCFCE7;color:#166534}
+.fb-no{background:#FEE2E2;color:#991B1B}
+.fb-info{background:var(--soft2);color:#5B21B6}
+.feedback b{display:block;margin-bottom:var(--s4);font-weight:800;font-size:14px}
+.hint{font-size:13px;color:var(--muted);background:var(--soft2);border-radius:var(--r8);
+  padding:var(--s8) var(--s12);margin-top:var(--s8);font-weight:600}
+
+.score-strip{display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(135deg,var(--soft2),#F3E8FF);border-radius:var(--r12);
+  padding:var(--s12) var(--s16);margin-top:var(--s16)}
+.score-strip .lab{font-size:12px;color:var(--muted);font-weight:700}
+.score-strip .val{font-family:var(--mono);font-size:18px;font-weight:800;color:var(--g1)}
+
+/* ====== buttons row ====== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s8);min-height:48px;
+  padding:0 var(--s20);border-radius:var(--r12);font-size:14px;font-weight:800;transition:filter .15s}
+.btn:active{filter:brightness(.94)}
+.btn-pri{background:var(--grad);color:#fff;box-shadow:0 4px 14px rgba(124,58,237,.3)}
+.btn-amb{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(249,115,22,.3)}
+.btn-ghost{background:#fff;border:1.5px solid var(--line);color:var(--text)}
+.btn:disabled{opacity:.5}
+.row{display:flex;gap:var(--s8);margin-top:var(--s16);flex-wrap:wrap}
+.row .btn{flex:1;min-width:120px}
+
+/* ====== result + analysis ====== */
+.result{text-align:center;padding:var(--s24);background:var(--card);
+  border:1px solid var(--line);border-radius:var(--r20);margin-top:var(--s16);box-shadow:var(--shadow)}
+.r-ring{width:120px;height:120px;margin:0 auto var(--s12);position:relative;display:grid;place-items:center}
+.r-ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.r-ring circle{fill:none;stroke-width:10;stroke-linecap:round}
+.r-ring .bg{stroke:var(--soft)}
+.r-ring .fg{stroke:url(#rg);transition:stroke-dashoffset .8s}
+.r-ring .big{position:relative;font-family:var(--mono);font-size:32px;font-weight:800;color:var(--g1)}
+.result h2{font-size:20px;font-weight:900;margin:0 0 var(--s4);color:var(--text)}
+.result .sub{color:var(--muted);font-size:13px;margin:0 0 var(--s16);font-weight:600}
+.result .xp-gain{font-family:var(--mono);font-size:13px;font-weight:800;color:var(--accent);
+  background:#FEF3C7;display:inline-block;padding:4px 12px;border-radius:99px;margin-bottom:var(--s12)}
+
+.ana{background:var(--soft2);border-radius:var(--r16);padding:var(--s16);margin:var(--s16) 0;text-align:left}
+.ana h4{margin:0 0 var(--s12);font-size:13px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:6px}
+.ana-row{display:grid;grid-template-columns:70px 1fr 48px;align-items:center;gap:var(--s8);margin-bottom:8px;font-size:12px}
+.ana-tp{font-weight:700;color:var(--text)}
+.ana-bar{height:8px;background:var(--soft);border-radius:99px;overflow:hidden}
+.ana-bar i{display:block;height:100%;border-radius:99px;transition:width .4s}
+.ana-bar.g i{background:var(--ok)}
+.ana-bar.a i{background:var(--warn)}
+.ana-bar.r i{background:var(--no)}
+.ana-n{font-family:var(--mono);font-size:11px;font-weight:800;color:var(--muted);text-align:right}
+.weak-line{margin-top:var(--s12);padding-top:var(--s12);border-top:1px dashed var(--line);
+  font-size:12.5px;color:#991B1B;font-weight:700;text-align:left}
+.weak-line i{font-style:normal;background:#FECDD3;padding:2px 8px;border-radius:99px;margin-right:4px;display:inline-block;margin-bottom:4px}
+
+/* ====== exam select ====== */
+.exsel{background:var(--card);border:1px solid var(--line);border-radius:var(--r20);
+  padding:var(--s24);margin-top:var(--s16);box-shadow:var(--shadow)}
+.exsel h2{font-size:20px;font-weight:900;margin:0 0 var(--s4)}
+.exsel > p{margin:0 0 var(--s16);color:var(--muted);font-size:13px;font-weight:600}
+.exch{padding:var(--s12);background:var(--soft2);border-radius:var(--r12);margin-bottom:var(--s8);border:1.5px solid transparent}
+.exch.on{border-color:var(--g1);background:#fff}
+.exch-h{display:flex;align-items:center;gap:var(--s12);cursor:pointer}
+.cb{width:24px;height:24px;border-radius:7px;border:2px solid var(--line);display:grid;place-items:center;color:#fff;flex:none;background:#fff;transition:all .15s}
+.exch.on .cb{background:var(--g1);border-color:var(--g1)}
+.cb::after{content:'✓';font-size:14px;font-weight:800;opacity:0}
+.exch.on .cb::after{opacity:1}
+.exch-info{flex:1;min-width:0}
+.exch-info h3{margin:0;font-size:14px;font-weight:800}
+.exch-info p{margin:2px 0 0;font-size:11px;color:var(--muted);font-weight:600}
+.exch-arrow{color:var(--muted);font-size:14px;font-weight:800;transition:transform .2s}
+.exch.open .exch-arrow{transform:rotate(180deg)}
+.topics{display:flex;flex-wrap:wrap;gap:6px;padding:8px 0 0 36px;display:none}
+.exch.open .topics{display:flex}
+.tp-chip{font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;background:#fff;border:1.5px solid var(--line);color:var(--muted);font-family:var(--mono)}
+.tp-chip.on{background:var(--g1);color:#fff;border-color:var(--g1)}
+.exsel .row{margin-top:var(--s20)}
+
+/* ====== sheets ====== */
+.sheet{position:fixed;inset:0;z-index:50;display:none}
+.sheet.open{display:block}
+.sheet-bg{position:absolute;inset:0;background:rgba(30,27,75,.5);backdrop-filter:blur(4px)}
+.sheet-card{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:var(--r24) var(--r24) 0 0;
+  padding:var(--s24);max-width:680px;margin:0 auto;animation:up .25s ease;max-height:88vh;overflow-y:auto}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.sheet-card h3{margin:0 0 var(--s4);font-size:17px;font-weight:900}
+.sheet-card > p{margin:0 0 var(--s16);color:var(--muted);font-size:13px;font-weight:600}
+.menu-item{display:flex;align-items:center;gap:var(--s12);width:100%;text-align:left;padding:var(--s16);
+  background:var(--soft2);border:1px solid var(--line);border-radius:var(--r12);margin-bottom:var(--s8);font-size:14px;font-weight:700}
+.menu-item:active{background:var(--soft)}
+.menu-item .ic{width:36px;height:36px;border-radius:var(--r10);background:#fff;display:grid;place-items:center;font-size:16px;color:var(--g1);flex:none;box-shadow:var(--shadow)}
+.menu-item small{display:block;font-weight:600;color:var(--muted);font-size:11px;margin-top:2px}
+
+.back{display:inline-flex;align-items:center;gap:var(--s4);color:var(--muted);font-size:13px;margin-top:var(--s16);font-weight:700}
+.back:active{color:var(--g1)}
+.hidden{display:none}
+.foot{text-align:center;color:var(--muted);font-size:11px;margin-top:var(--s24);padding-bottom:var(--s16);font-weight:600}
+.foot b{color:var(--g1);font-family:var(--mono)}
+@media(max-width:380px){.hero h1{font-size:19px}.lesson h2{font-size:18px}.ch-actions{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <div class="logo">AI</div>
+      <b>AI 学习工作台</b>
+    </div>
+    <div class="right">
+      <span class="lv-chip" id="topLv">Lv.1</span>
+      <span class="xp-chip" id="topXp">⚡ 0</span>
+      <button class="iconbtn" id="menuBtn" aria-label="菜单">≡</button>
+    </div>
+  </div>
+  <div class="top-bar-wrap"><div class="pbar"><i id="topBar" style="width:0%"></i></div></div>
+</header>
+
+<main class="wrap" id="app"></main>
+
+<div class="sheet" id="sheet">
+  <div class="sheet-bg" data-close></div>
+  <div class="sheet-card">
+    <h3>学习数据</h3>
+    <p>进度自动存本机。换设备？导出文件带走，再导入即可恢复。</p>
+    <button class="menu-item" id="exportBtn"><span class="ic">⬇</span><span>导出进度<small>下载 JSON 文件备份</small></span></button>
+    <button class="menu-item" id="importBtn"><span class="ic">⬆</span><span>导入进度<small>从 JSON 文件恢复</small></span></button>
+    <button class="menu-item" id="resetBtn" style="color:var(--no)"><span class="ic" style="color:var(--no);background:#FEE2E2">↺</span><span>重置进度<small>清空本机记录，从头开始</small></span></button>
+    <button class="btn btn-ghost btn-full" data-close style="margin-top:var(--s8)">关闭</button>
+    <input type="file" id="fileInput" accept="application/json" class="hidden">
+  </div>
+</div>
+
+<div class="sheet" id="tocSheet">
+  <div class="sheet-bg" data-close-toc></div>
+  <div class="sheet-card">
+    <h3 id="tocTitle">本章目录</h3>
+    <p>点击跳转到任意小节</p>
+    <div id="tocList"></div>
+    <button class="btn btn-ghost btn-full" data-close-toc style="margin-top:var(--s8)">关闭</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   COURSES 知识库 —— 内容编辑区
+   每章: id, title, level, summary, lesson{kicker,title,pages[]}, quiz[]
+   每页: {title, blocks[]} —— blocks 可含 h/p/ul/ol/note/code/table
+   题型: single/multi/judge/case/prompt
+   每题加 tp:'知识点标签'，用于考核后的掌握度分析
+   ============================================================ */
+const CH_COLORS=[
+  ['#7c3aed','#a855f7'],
+  ['#2563eb','#3b82f6'],
+  ['#0891b2','#06b6d4'],
+  ['#db2777','#ec4899'],
+  ['#059669','#10b981']
+];
+
+const COURSES = [
+  /* ========== 第 1 章 ========== */
+  {
+    id:'c1', title:'AI 到底是什么', level:'入门概念', summary:'从"程序"到"会学习的程序"，搞清 AI、机器学习、深度学习的关系。',
+    lesson:{
+      kicker:'第 1 章 · 入门',
+      title:'AI 基础与全貌',
+      pages:[
+        {title:'AI 的一句话定义', blocks:[
+          {h:'什么是 AI', p:'AI（人工智能，Artificial Intelligence）= 让机器完成"通常需要人类智能"的任务的方法集合。注意关键词——<b>方法集合</b>，不是一个具体的东西，而是一大类技术的统称。'},
+          {h:'它不是什么', p:'AI ≠ 能像人一样思考的机器。现在你接触到的 AI（含 ChatGPT 这类大模型）本质是<b>统计模式匹配</b>——从海量数据里学规律，再套用规律生成输出。它不是真的"懂"，而是"算得像"。'},
+          {h:'一个准确的类比', p:'把大模型当一台超强的<b>"猜下一个词"机器</b>。你给它一段开头，它基于见过的海量文本，算出最可能的下一个词是什么，然后一个词一个词地接下去。理解这个，你对 AI 的预期会准确很多。'},
+          {note:'<b>记住</b>：看到"AI 解决一切"的宣传先打个问号。先问——这是规则、ML 还是 DL？数据哪来的？边界在哪？'}
+        ]},
+        {title:'AI 的三个层级', blocks:[
+          {h:'三层关系：AI ⊃ ML ⊃ DL', p:'AI 是最大的圈，里面包含机器学习（ML），ML 里面又包含深度学习（DL）。三者不是并列，是层层嵌套。'},
+          {h:'第一层：规则 AI', p:'人写死规则，机器照做。例：计算器、传统垃圾邮件过滤、红绿灯控制。它<b>不会学习</b>，只会执行预设逻辑。优点是可预测、可审计；缺点是遇到没写过的情况就傻了。'},
+          {h:'第二层：机器学习（ML）', p:'人给数据，机器自己找规律。例：垃圾邮件分类、商品推荐、信用评分。核心转变：从"写规则"变成"喂数据让模型自己学规则"。需要大量<b>标注数据</b>（人标好答案的数据）。'},
+          {h:'第三层：深度学习（DL）', p:'用多层神经网络自动学复杂特征。大模型、图像识别、语音识别都属这类。DL 的"深"指网络层数多，能自动学习从简单到复杂的特征层次。代价是需要大量算力（GPU）和数据。'},
+          {table:{head:['层级','是否学习','数据需求','典型应用'],rows:[
+            ['规则 AI','否','无','计算器、规则引擎'],
+            ['机器学习','是','中等','分类、回归、推荐'],
+            ['深度学习','是','大量','大模型、图像、语音']
+          ]}}
+        ]},
+        {title:'AI 能做什么、不能做什么', blocks:[
+          {h:'AI 擅长的', ul:[
+            '<b>找规律</b>：从数据里发现人类难以察觉的模式',
+            '<b>做分类</b>：垃圾邮件检测、图片识别、情感分析',
+            '<b>生成内容</b>：文本、图片、代码、音乐',
+            '<b>翻译与摘要</b>：语言转换、长文压缩',
+            '<b>模式匹配</b>：相似度搜索、推荐'
+          ]},
+          {h:'AI 做不好的', ul:[
+            '<b>真懂因果</b>：它能发现相关，但分不清因果',
+            '<b>常识推理</b>：人类三岁小孩懂的物理常识，AI 可能搞错',
+            '<b>对自己负责</b>：它不知道自己"不知道"，会自信地编造',
+            '<b>实时信息</b>：训练数据截止后的事，它不知道（除非联网/RAG）',
+            '<b>精确数学</b>：大模型做数学容易出错，因为它在"猜"不是在"算"'
+          ]},
+          {note:'<b>实用判断法</b>：问自己——这个任务需要"从数据里找规律"还是"需要真正的因果推理/常识"？前者 AI 能帮，后者要小心。'}
+        ]},
+        {title:'AI 发展简史', blocks:[
+          {h:'三次浪潮', ul:[
+            '<b>1950s-70s 符号主义</b>：用手写规则模拟思考。能下棋、做定理证明，但遇到现实模糊问题就崩。第一次 AI 寒冬。',
+            '<b>1980s-90s 专家系统</b>：把人类专家知识编码成规则库。在医疗诊断等领域小有成功，但知识获取瓶颈导致第二次寒冬。',
+            '<b>2006-至今 深度学习</b>：大数据 + GPU 算力 + 深度神经网络 = 爆发。2012 年 AlexNet 赢图像比赛，2016 年 AlphaGo 赢围棋，2022 年 ChatGPT 炸场。'
+          ]},
+          {h:'为什么是现在爆发', p:'三个条件同时成熟：①互联网积累了海量数据 ②GPU 算力足够便宜 ③深度学习算法成熟。三者缺一不可。'},
+          {note:'<b>给自学者的提醒</b>：不用纠结历史细节，但要知道——AI 不是魔法，它是特定技术条件下的产物。条件变了（比如算力受限），有些能力会缩水。这帮你理性预期。'}
+        ]}
+      ]
+    },
+    quiz:[
+      {tp:'定义', type:'single', q:'下面哪个描述最准确？', opts:['AI 就是能像人一样思考的机器','AI 是让机器完成"通常需要人类智能"的任务的方法集合','AI 等于大模型','AI 就是 ChatGPT'], a:1, exp:'AI 是一大类方法的统称，大模型只是其中一种。关键是"方法集合"而非"像人思考"。'},
+      {tp:'定义', type:'judge', q:'现在的 AI（含大模型）本质是统计模式匹配，并非真正"理解"含义。', a:true, exp:'正确。大模型在"猜下一个 token"而非真正理解语义。'},
+      {tp:'层级', type:'single', q:'AI、机器学习、深度学习三者的关系是？', opts:['并列的三种不同技术','AI ⊃ 机器学习 ⊃ 深度学习，层层包含','深度学习包含机器学习包含 AI','三者完全独立'], a:1, exp:'AI 是最大概念，ML 是 AI 的子集，DL 又是 ML 的子集。'},
+      {tp:'层级', type:'case', q:'公司想"用 AI 自动审核报销单"。现有 10 万张已审批的报销单数据。这适合哪种方案？', case:'场景：财务每月审上万张报销单，想自动化，手头有大量历史审批结果可做训练数据。', opts:['规则 AI：写死金额/发票规则','机器学习：用历史数据训练分类模型','深度学习大模型：直接丢给 GPT 判断','放弃，AI 不靠谱'], a:1, exp:'有标注数据 + 明确分类任务，传统 ML 性价比最高。大模型反而又贵又不可控。'},
+      {tp:'能力边界', type:'multi', q:'下面哪些是 AI 做不好的？（多选）', opts:['从数据里找规律','真正的因果推理','常识判断','对自己输出负责'], a:[1,2,3], exp:'找规律是 AI 的强项；因果推理、常识、自我认知都是弱项。'},
+      {tp:'发展史', type:'single', q:'深度学习爆发的三个条件是？', opts:['更多规则 + 更快 CPU + 更好的算法','海量数据 + GPU 算力 + 深度学习算法成熟','更多标注员 + 更好的规则引擎 + 云计算','量子计算 + 5G + 脑科学'], a:1, exp:'数据、算力、算法三者同时成熟是 DL 爆发的基础。'},
+      {tp:'层级', type:'single', q:'传统垃圾邮件过滤器靠人写死的关键词判断"含 XXX 就是垃圾邮件"，它属于？', opts:['规则 AI','机器学习','深度学习','大模型'], a:0, exp:'写死规则、不会学习，是典型规则 AI。'},
+      {tp:'能力边界', type:'judge', q:'AI 发现两个变量高度相关，就说明其中一个导致了另一个。', a:false, exp:'错。相关 ≠ 因果。AI 擅长发现相关但分不清因果。'},
+      {tp:'定义', type:'single', q:'把大模型比作"超强的猜下一个词机器"，是为了说明它？', opts:['从数据库检索答案','按概率逐词生成文本','执行人写的规则','真的在思考'], a:1, exp:'这个类比强调它的本质是概率生成，不是检索也不是思考。'},
+      {tp:'发展史', type:'single', q:'AlphaGo 战胜围棋世界冠军，属于 AI 发展中哪个阶段的成果？', opts:['符号主义时代','专家系统时代','深度学习时代','规则 AI 时代'], a:2, exp:'AlphaGo 基于深度神经网络+强化学习，是深度学习时代的标志性事件。'}
+    ]
+  },
+
+  /* ========== 第 2 章 ========== */
+  {
+    id:'c2', title:'大模型 LLM 全解析', level:'概念进阶', summary:'Token、训练流程、上下文窗口、幻觉、主流模型——搞懂这些才不会被"聪明"骗到。',
+    lesson:{
+      kicker:'第 2 章 · 进阶',
+      title:'大模型是怎么"学会说话"的',
+      pages:[
+        {title:'什么是大模型', blocks:[
+          {h:'定义', p:'大模型（LLM，Large Language Model）= 用海量文本训练出来的超大神经网络，核心能力是<b>预测下一个 token</b>。它"说话"其实是逐 token 概率生成。'},
+          {h:'"大"指什么', p:'大指<b>参数量</b>大。参数是神经网络里可学习的数字权重，越多 = 模型容量越大 = 能学越复杂的规律。GPT-3 有 1750 亿参数，GPT-4 据传是万亿级（未公开）。参数不是唯一指标，但量级到了一定程度才会出现"涌现能力"。'},
+          {h:'涌现能力', p:'小模型只能做简单续写，到了某个规模（百亿参数以上），模型突然能做复杂推理、多语言翻译、写代码——这种"量变引起质变"叫<b>涌现（Emergence）</b>。这是大模型"大"的核心意义。'},
+          {note:'<b>关键认知</b>：大模型不是在"查数据库"，而是在"生成最可能的下一个词"。它说的每一句话都是概率计算的结果，不是从某个库里调出来的。'}
+        ]},
+        {title:'训练三步走', blocks:[
+          {h:'第一步：预训练（Pre-training）', p:'让模型吃全网文本（网页、书籍、代码、论文），学会语言和世界知识。这是最贵的一步——几千张 GPU 跑几个月，成本几千万到上亿。预训练后的模型叫<b>基座模型</b>，能续写但不会"对话"。'},
+          {h:'第二步：监督微调（SFT）', p:'用人工写的"指令-回答"示范数据，教模型听人话办事。几千到几万条高质量对话，让模型从"会写"变成"会答"。成本比预训练低得多，但数据质量要求极高。'},
+          {h:'第三步：对齐（Alignment / RLHF）', p:'用人类反馈做强化学习（RLHF），让模型输出更安全、有用、少胡说。核心思路：让人类标注员给模型多个回答打分，训练一个"奖励模型"，再用它优化大模型。'},
+          {table:{head:['阶段','目标','数据','成本'],rows:[
+            ['预训练','学语言+知识','万亿级 token','极高'],
+            ['SFT 微调','学会对话','几万条示范','中等'],
+            ['RLHF 对齐','安全有用','人类偏好评分','中等']
+          ]}},
+          {note:'<b>知道这些有什么用</b>：理解了三步走，你就知道为什么同一个基座模型，微调方式不同效果差很远。也明白"开源模型"通常只开基座，对齐做不好是另一回事。'}
+        ]},
+        {title:'Token 与上下文窗口', blocks:[
+          {h:'Token 是什么', p:'模型不读"字"，读 token。一个 token 约 0.6 个汉字、约 0.75 个英文单词。"ChatGPT" 可能是 1 个 token，"人工智能" 可能是 2-3 个 token。token 化方式因模型而异。'},
+          {h:'上下文窗口', p:'<b>上下文窗口（Context Window）</b>= 一次能塞进模型的 token 上限。GPT-3 是 2K，GPT-4 可达 128K，Claude 可达 200K。窗口大 = 能读更长文档、记住更多对话历史。'},
+          {h:'窗口大 ≠ 更聪明', p:'窗口只决定<b>能看多少</b>，不决定<b>理解多深</b>。把整本书塞进去，它也可能在某个细节上答不准——因为长文本里信息会被稀释，模型对中间部分注意力会下降（叫"中间遗忘"现象）。'},
+          {h:'实际影响', p:'窗口大小决定了你一次能给模型多少材料。做长文档摘要要大窗口；做短问答，小窗口够用。API 按 token 计费，窗口越大单次成本越高。'},
+          {note:'<b>别踩的坑</b>："上下文窗口越大 = 越聪明"是错的。能力和窗口是两回事。128K 窗口的小模型，理解力不如 8K 窗口的大模型。'}
+        ]},
+        {title:'幻觉与如何减少', blocks:[
+          {h:'什么是幻觉', p:'<b>幻觉（Hallucination）</b>= 模型一本正经地编造不存在的事实。引用不存在的论文、编造 API 文档、虚构历史事件——而且语气非常自信。'},
+          {h:'为什么会产生幻觉', p:'根因：模型在"生成最像的下一句"，不是在"查真相"。当它不确定时，它会生成"看起来最合理"的内容，而不是说"我不知道"。它没有"知道自己不知道"的能力。'},
+          {h:'减少幻觉的方法', ul:[
+            '<b>给可靠上下文（RAG）</b>：把真实资料喂给它，让它"从资料里答"而非"凭记忆答"',
+            '<b>要求说明依据</b>：让模型标注信息来源或引用原文',
+            '<b>关键事实人工复核</b>：涉及数字、人名、日期的，一定要核对',
+            '<b>降低温度参数</b>：temperature 调低，减少随机性',
+            '<b>要求"不确定就说不知道"</b>：在 prompt 里明确指示',
+            '<b>分步验证</b>：让模型自己检查自己的输出'
+          ]},
+          {note:'<b>核心心法</b>：大模型是"生成器"不是"检索器"。你需要它生成创意 → 放手让它写；你需要它给准确事实 → 必须给它可靠来源或事后核对。混着用会出事。'}
+        ]},
+        {title:'主流大模型一览', blocks:[
+          {h:'闭源商业模型', ul:[
+            '<b>GPT 系列（OpenAI）</b>：GPT-4/4o，综合能力顶尖，生态最成熟，API 最常用',
+            '<b>Claude 系列（Anthropic）</b>：Claude 3/3.5，长文本和写作能力突出，安全性口碑好',
+            '<b>Gemini 系列（Google）</b>：多模态（文字+图片+视频），与 Google 生态集成',
+            '<b>文心一言（百度）、通义千问（阿里）、豆包（字节）、混元（腾讯）</b>：国内主流，中文理解好，合规'
+          ]},
+          {h:'开源模型', ul:[
+            '<b>Llama 系列（Meta）</b>：Llama 2/3，全球最火的开源基座，社区生态大',
+            '<b>Qwen 系列（阿里）</b>：通义千问开源版，中文能力强的开源选择',
+            '<b>Mistral 系列</b>：欧洲团队，小而精，推理效率高',
+            '<b>DeepSeek 系列</b>：国产，推理能力强且开源，性价比高'
+          ]},
+          {h:'怎么选', p:'<b>原则</b>：①要最高能力 → 闭源旗舰 ②要数据隐私/本地部署 → 开源 ③中文场景优先 → 国内模型或 Qwen ④成本敏感 → 轻量开源 + 自己部署。没有"最好"，只有"最合适"。'},
+          {note:'<b>给自学者的建议</b>：别追"最新最强"，先用好一个。GPT-4o 或 Claude 3.5 学概念、跑 demo 足够了。等你需要私有部署或省钱时再研究开源。'}
+        ]}
+      ]
+    },
+    quiz:[
+      {tp:'本质', type:'single', q:'大模型生成文本的本质是？', opts:['从数据库里检索答案','预测概率最高的下一个 token','调用搜索引擎','真的在思考'], a:1, exp:'大模型的本质是"猜下一个 token"，基于概率生成，不是检索也不是思考。'},
+      {tp:'训练', type:'multi', q:'大模型训练三步走是哪三步？（多选）', opts:['预训练','监督微调（SFT）','强化学习对齐（RLHF）','人工写规则'], a:[0,1,2], exp:'预训练学语言，SFT 学对话，RLHF 做对齐。第四个是规则 AI 的做法。'},
+      {tp:'上下文', type:'judge', q:'上下文窗口越大，模型就越聪明。', a:false, exp:'错。窗口决定"能看多少"，聪明度看模型参数量和训练质量。'},
+      {tp:'幻觉', type:'multi', q:'哪些做法能减少大模型幻觉？（多选）', opts:['给它可靠上下文（RAG）','让它说明依据','要求它"必须100%正确"','关键事实人工复核'], a:[0,1,3], exp:'"必须正确"是空话。给它可靠来源、要求标注依据、人工复核才是实际手段。'},
+      {tp:'本质', type:'single', q:'大模型的"大"主要指什么？', opts:['训练数据量大','参数量大','上下文窗口大','用户数量大'], a:1, exp:'"大"指参数量大。参数量到了百亿以上才可能出现涌现能力。'},
+      {tp:'幻觉', type:'case', q:'律师想用大模型查判例。下面哪种用法风险最低？', case:'场景：客户问"类似案件通常怎么判"，需要准确判例依据，不能出错。', opts:['直接问大模型，让它给判例号','把真实判例库检索结果喂给大模型，让它总结（RAG）','让大模型自由发挥','问一次就信'], a:1, exp:'幻觉在法律场景致命。RAG 方式让模型基于真实判例回答，可核对、可追溯，风险最低。'},
+      {tp:'模型选择', type:'single', q:'选择大模型时，最核心的原则是？', opts:['选参数量最大的','选最新的','根据场景需求选最合适的','选最贵的'], a:2, exp:'没有"最好"只有"最合适"——隐私需求选开源，中文场景选国内模型，成本敏感选轻量。'},
+      {tp:'训练', type:'single', q:'预训练之后、RLHF 对齐之前，通常先做哪一步？', opts:['监督微调 SFT','再预训练一次','部署上线','人工写规则'], a:0, exp:'标准顺序：预训练 → SFT → RLHF。'},
+      {tp:'上下文', type:'judge', q:'"中间遗忘"现象指模型对长文本中间部分的信息把握变差。', a:true, exp:'对。长上下文里中间信息注意力下降，是"窗口大 ≠ 都记得"的原因之一。'},
+      {tp:'模型选择', type:'case', q:'公司要求 AI 部署在内网、数据绝不能出外网，应选？', case:'场景：金融公司合规要求所有数据留在内网。', opts:['调用 GPT-4o 网页 API','开源模型（如 Qwen）本地部署','用网页版 ChatGPT 粘贴数据','放弃 AI'], a:1, exp:'隐私/合规需求 → 开源本地部署。API 方式数据会过第三方。'}
+    ]
+  },
+
+  /* ========== 第 3 章 ========== */
+  {
+    id:'c3', title:'Agent 智能体深入', level:'进阶实战', summary:'Agent = 大模型 + 工具 + 记忆 + 规划。学会什么时候用、怎么设计 Agent 提示词。',
+    lesson:{
+      kicker:'第 3 章 · 实战',
+      title:'让 AI 从"会聊"到"会干活"',
+      pages:[
+        {title:'Agent 是什么', blocks:[
+          {h:'定义', p:'Agent（智能体）= 以大模型为大脑，配上<b>工具调用、记忆、规划</b>，能自主完成多步任务的系统。'},
+          {h:'和聊天机器人的区别', p:'普通聊天：你问一句答一句，被动响应。Agent：你给一个目标，它自己<b>拆任务、调工具、看结果、判断、继续</b>，主动推进直到完成。'},
+          {h:'一个例子', p:'你说"帮我查最近一周茅台的涨跌幅并算出日均波动"。聊天机器人只会给你一段话（可能编的）；Agent 会：①调用搜索工具查股价 ②调用计算器算波动 ③核对数据 ④汇总报告。每一步都有真实数据支撑。'},
+          {note:'<b>核心理解</b>：Agent 不是"更强的聊天机器人"，而是"会使用工具的自动化系统"。大模型是它的大脑，工具是它的手脚。'}
+        ]},
+        {title:'Agent 四要素', blocks:[
+          {h:'① 大脑：大模型', p:'负责理解任务、推理决策、生成指令。大模型的能力直接决定 Agent 的上限——弱模型连任务都拆不明白。'},
+          {h:'② 工具：搜索/计算/API/代码执行', p:'工具是 Agent 的手脚。常见工具：搜索引擎（查实时信息）、计算器（精确计算）、代码执行沙盒（跑 Python）、数据库查询、文件读写、发邮件/消息。'},
+          {h:'③ 记忆：短期 + 长期', ul:[
+            '<b>短期记忆</b>：本次对话的上下文（在上下文窗口里）',
+            '<b>长期记忆</b>：知识库 / 向量库，跨会话记住信息',
+            '记忆让 Agent 能"回顾之前做过什么"和"调用历史知识"'
+          ]},
+          {h:'④ 规划：任务拆解与调度', p:'把大目标拆成可执行的小步，决定每步用什么工具、按什么顺序。经典模式是 <b>ReAct</b>（Reasoning + Acting）——思考一步、行动一步、观察结果、再思考。'},
+          {table:{head:['要素','角色','类比'],rows:[
+            ['大模型','理解+决策','大脑'],
+            ['工具','执行动作','手脚'],
+            ['记忆','存储上下文/知识','记忆'],
+            ['规划','拆任务+调度','思维方式']
+          ]}}
+        ]},
+        {title:'ReAct 与规划模式', blocks:[
+          {h:'ReAct 是什么', p:'ReAct = Reasoning + Acting。循环流程：<b>思考（Thought）→ 行动（Action）→ 观察（Observation）→ 再思考</b>。每一步先想清楚做什么，再调用工具做，看到结果后决定下一步。'},
+          {h:'ReAct 循环示例', code:'Thought: 用户要查茅台涨跌幅，需要先搜索股价数据\nAction: search("贵州茅台 近一周 股价")\nObservation: 找到数据：周一1830，周二1850...周五1880\nThought: 有数据了，需要计算日均波动\nAction: calculate("标准差(1830,1850,...,1880)")\nObservation: 日均波动约 0.8%\nThought: 数据齐全，可以汇总了\nAction: respond("茅台近一周涨2.7%，日均波动0.8%")'},
+          {h:'其他规划模式', ul:[
+            '<b>Plan-and-Execute</b>：先做完整计划再执行，适合步骤明确的任务',
+            '<b>ReWOO</b>：先规划所有工具调用，减少中间推理轮次，省 token',
+            '<b>多 Agent 协作</b>：多个 Agent 分工（一个规划、一个执行、一个审查）'
+          ]},
+          {note:'<b>给自学者的提醒</b>：不用背这些模式名。理解 ReAct 的"想→做→看→再想"循环就够了，其他都是在优化这个循环的不同方面。'}
+        ]},
+        {title:'什么时候该用 Agent', blocks:[
+          {h:'该用 Agent 的场景', ul:[
+            '任务<b>多步</b>，需要拆解和中间判断',
+            '需要<b>外部信息</b>（搜索、数据库、实时数据）',
+            '需要<b>调用工具</b>完成动作（计算、发消息、执行代码）',
+            '目标明确但路径不确定，需要中途调整'
+          ]},
+          {h:'不该用 Agent 的场景', ul:[
+            '一句话能答的 → 直接问大模型更快',
+            '纯创作（写诗、写故事）→ 普通对话更好',
+            '固定流程的重复任务 → 写传统脚本更稳更便宜',
+            '对准确性要求极高且不可验证 → Agent 可能跑偏，更危险'
+          ]},
+          {h:'Agent 的代价', p:'Agent 更慢（多轮调用）、更贵（多次 API 请求）、更易跑偏（每步都可能出错）。只有任务复杂到值得付出这些代价时才该用。'},
+          {note:'<b>实用判断</b>：问自己"这个任务一步能完成吗？"——能，别用 Agent。不能，且每步都需要判断和外部信息，才考虑 Agent。'}
+        ]},
+        {title:'多 Agent 协作简介', blocks:[
+          {h:'什么是多 Agent', p:'把复杂任务拆给多个专职 Agent：一个负责规划，一个负责执行，一个负责审查。各司其职，互相校验。'},
+          {h:'典型分工', ul:[
+            '<b>Planner Agent</b>：接收任务，拆成子任务列表',
+            '<b>Executor Agent</b>：逐个执行子任务，调用工具',
+            '<b>Critic/Reviewer Agent</b>：审查执行结果，发现错误让 Executor 重做'
+          ]},
+          {h:'优势和风险', p:'优势：分工明确、互相校验、单个 Agent 跑偏能被另一个拉回来。风险：通信开销大、可能陷入"互相否定"死循环、调试困难。'},
+          {note:'<b>给自学者的提醒</b>：多 Agent 是高级话题，别一上来就搞。先玩透单 Agent + ReAct，理解了再考虑多 Agent。大部分任务单 Agent 够用。'}
+        ]}
+      ]
+    },
+    quiz:[
+      {tp:'概念', type:'single', q:'Agent 和普通聊天机器人最关键的区别是？', opts:['Agent 用了更贵的模型','Agent 能自主多步行动 + 调工具','Agent 不需要大模型','Agent 只能聊天'], a:1, exp:'关键词：自主、多步、工具。Agent 能自己拆任务、调工具、看结果、继续干。'},
+      {tp:'四要素', type:'multi', q:'Agent 的四要素是哪些？（多选）', opts:['大模型（大脑）','工具（手脚）','记忆','规则引擎'], a:[0,1,2], exp:'四要素：大模型、工具、记忆、规划。规则引擎不是 Agent 要素。'},
+      {tp:'ReAct', type:'single', q:'ReAct 的循环流程是？', opts:['计划→执行→汇报','思考→行动→观察→再思考','输入→输出','提问→回答'], a:1, exp:'ReAct = Thought→Action→Observation→Thought。'},
+      {tp:'适用场景', type:'case', q:'下面哪个任务最适合用 Agent？', case:'场景：你有一堆候选任务，要挑 Agent 最适合的那个。', opts:['把一段中文翻译成英文','总结一篇 500 字文章','每天自动搜集竞品价格、对比变化、生成周报','写一首关于秋天的诗'], a:2, exp:'需要搜集信息+多步+判断+调工具的，才是 Agent 的菜。'},
+      {tp:'多Agent', type:'judge', q:'Agent 比 Agent 模式越复杂越好，多 Agent 一定比单 Agent 强。', a:false, exp:'错。Agent 有额外代价（慢、贵、易跑偏）。多 Agent 更复杂更难调。'},
+      {tp:'适用场景', type:'multi', q:'下面哪些场景不该用 Agent？（多选）', opts:['一句话能答的问题','需要搜集实时数据并分析的任务','固定流程的重复操作','需要多步判断+外部信息的复杂任务'], a:[0,2], exp:'一句话能答的用对话更快；固定流程用脚本更稳。'},
+      {tp:'概念', type:'prompt', q:'动手写一个 Agent 提示词', case:'任务：你有一个"搜索工具"和"计算器工具"。请写一段提示词，让 Agent 帮用户"查最近一周某只股票的涨跌幅并算出日均波动"。系统会按关键词给你模拟反馈。',
+        rubric:[
+          {k:['角色','你是','你是一个','agent','助手'], t:'设定了角色身份', g:'加一句"你是一个数据分析 Agent"会更好。'},
+          {k:['工具','搜索','计算','调用'], t:'说明了可用工具', g:'明确告诉它有"搜索工具"和"计算器工具"及何时用。'},
+          {k:['分步','步骤','先','然后','第一','第二步','逐步'], t:'要求了分步思考', g:'让它"分步思考，每步汇报"能减少跑偏。'},
+          {k:['验证','核对','检查','确认','汇报'], t:'要求了验证/汇报', g:'加一句"每步给出依据，最后汇总结果"更稳。'}
+        ]
+      },
+      {tp:'四要素', type:'single', q:'搜索工具、计算器在 Agent 四要素中属于？', opts:['大脑','工具','记忆','规划'], a:1, exp:'工具是 Agent 的手脚。'},
+      {tp:'概念', type:'judge', q:'Agent 的大脑是大模型，模型能力直接决定 Agent 的能力上限。', a:true, exp:'对。弱模型连任务都拆不明白，再好的工具也白搭。'},
+      {tp:'ReAct', type:'single', q:'ReAct 里的 Observation（观察）指？', opts:['模型的内心思考','工具调用返回的结果','用户的追问','最初的任务目标'], a:1, exp:'Observation 是行动后拿到的结果，作为下一步思考的输入。'}
+    ]
+  },
+
+  /* ========== 第 4 章 ========== */
+  {
+    id:'c4', title:'Prompt 工程实战', level:'实战技能', summary:'好提示词不是天赋，是技巧。学会结构化 Prompt、Few-shot、CoT，避开常见反模式。',
+    lesson:{
+      kicker:'第 4 章 · 实战',
+      title:'Prompt 工程：跟 AI 说话的艺术',
+      pages:[
+        {title:'Prompt 为什么重要', blocks:[
+          {h:'什么是 Prompt', p:'Prompt（提示词）= 你给大模型的输入指令。同样一个模型，提示词写得好和写得差，结果天差地别。'},
+          {h:'垃圾进垃圾出', p:'大模型是"概率生成器"，你给它模糊的输入，它给你模糊的输出。你给清晰、具体、有约束的输入，它才能给你精准的输出。'},
+          {h:'一个对比', code:'# 烂 Prompt\n写一篇关于 AI 的文章\n\n# 好 Prompt\n你是一位科技科普作者，面向非技术读者。\n写一篇 800 字的科普文，主题是"大模型为什么会幻觉"。\n要求：①用比喻解释 ②给出减少幻觉的 3 个方法 ③结尾呼吁读者核实关键事实\n语气：通俗易懂，不带术语轰炸'},
+          {note:'<b>核心心法</b>：Prompt 工程不是"讨好 AI"，而是"把你的需求讲清楚"。你跟同事讲不清需求他也做不好，何况一个概率模型。'}
+        ]},
+        {title:'好的 Prompt 结构', blocks:[
+          {h:'四要素框架', p:'一个好 Prompt 通常包含：<b>角色 + 任务 + 约束 + 格式</b>。'},
+          {table:{head:['要素','作用','示例'],rows:[
+            ['角色','设定视角和专业度','你是一位资深数据分析师'],
+            ['任务','说清要做什么','分析这份销售数据的趋势'],
+            ['约束','限定边界和规则','只看 Q3 数据，不超过 500 字'],
+            ['格式','指定输出结构','用表格输出，含月份和增长率两列']
+          ]}},
+          {h:'实例', code:'# 角色\n你是一位产品经理，擅长把用户反馈转化为需求文档。\n\n# 任务\n把下面用户反馈整理成结构化需求列表。\n\n# 约束\n- 每条需求不超过 2 行\n- 标注优先级（P0/P1/P2）\n- 合并重复反馈\n\n# 格式\n输出表格：| 编号 | 需求 | 优先级 | 来源 |\n\n# 用户反馈\n（贴入反馈原文）'},
+          {note:'<b>不用每次都写四要素</b>：简单问题一句话就行。但输出不满意时，先检查是不是少了约束或格式——八成是这俩没说清。'}
+        ]},
+        {title:'常用技巧', blocks:[
+          {h:'Few-shot（少样本示例）', p:'给模型几个输入-输出示例，让它照着做。比纯描述规则更有效，因为模型从示例里"学"模式比从描述里"理解"规则更容易。', code:'示例：\n输入：这家餐厅服务太差了 → 输出：负面\n输入：产品质量超出预期 → 输出：正面\n输入：物流速度还行 → 输出：中性\n输入：（你要分类的文本） → 输出：'},
+          {h:'Chain-of-Thought（思维链）', p:'让模型"一步一步想"，把推理过程写出来。对数学题、逻辑推理题特别有效。只需在 prompt 里加一句"请一步步推理"。'},
+          {h:'角色扮演', p:'让模型扮演特定角色（专家、老师、审查员），它会调整语气和专业度。但注意——角色扮演不能给模型真实能力，一个 7B 模型扮演"顶级医生"也不如 GPT-4 不扮演。'},
+          {h:'分步拆解', p:'复杂任务不要一口气问，拆成多步：先让它分析，再让它列要点，最后让它生成。每步的输出作为下一步的输入。这比"一次性做完全部"效果好得多。'},
+          {note:'<b>选择技巧的原则</b>：简单任务 → 直接问就行。需要格式规范 → 加格式约束。需要推理 → 加 CoT。需要一致性 → 加 Few-shot。不要为用而用。'}
+        ]},
+        {title:'Prompt 调试与迭代', blocks:[
+          {h:'Prompt 不是一次写好的', p:'写 prompt → 看输出 → 不满意 → 改 prompt → 再试。这是一个迭代过程，别指望一次写对。'},
+          {h:'调试三板斧', ul:[
+            '<b>看输出找问题</b>：输出太长？加字数约束。格式乱？给模板。答非所问？任务描述不清。幻觉？加"基于以下材料回答"。',
+            '<b>改一个变量</b>：每次只改一处（约束/格式/示例），看效果变化。别一次改五处，你不知道哪个起作用。',
+            '<b>用极端输入测试</b>：拿一个边界 case（空输入、超长输入、模糊输入）试，看模型怎么崩'
+          ]},
+          {h:'常见问题对照表', table:{head:['问题','可能原因','改法'],rows:[
+            ['输出太长/太短','没加字数约束','加"不超过 N 字"或"至少 N 字"'],
+            ['格式混乱','没指定格式','给模板或示例'],
+            ['答非所问','任务描述模糊','用更具体的动词替换模糊词'],
+            ['编造事实','没有给上下文','加"基于以下材料" + 贴材料'],
+            ['风格不对','没设角色/语气','加角色和语气约束']
+          ]}}
+        ]},
+        {title:'常见反模式', blocks:[
+          {h:'① 空话约束', p:'"请必须100%准确""请给出最好的答案"——这是废话。模型不知道怎么"100%准确"，你得告诉它具体怎么做：给参考材料、要求标注来源、不确定时说"不知道"。'},
+          {h:'② 信息过载', p:'一个 prompt 塞 20 条规则 + 10 个示例 + 5000 字背景。模型注意力有限，太多约束反而每条都执行不好。拆成多步更有效。'},
+          {h:'③ 模糊指令', p:'"写好一点""专业一些""更有深度"——什么叫好？什么叫专业？改成具体的："用学术期刊语气""每段引用至少一个数据""分析底层因果"。'},
+          {h:'④ 矛盾指令', p:'"详细但简短""面向新手但用专业术语"——模型会困惑。要么详细要么简短，选一个。如果要兼顾，说清结构："主体 300 字简述，附录详细展开"。'},
+          {note:'<b>总结</b>：好 prompt = 清晰 + 具体 + 可执行。模糊的形容词（好一点、专业些）是敌人，具体的动词和数字是朋友。'}
+        ]}
+      ]
+    },
+    quiz:[
+      {tp:'结构', type:'single', q:'好的 Prompt 通常包含哪四要素？', opts:['语气+语气+语气+语气','角色+任务+约束+格式','开头+中间+结尾+标题','问题+答案+解释+总结'], a:1, exp:'四要素框架：角色设定视角，任务说清做什么，约束限定边界，格式指定输出结构。'},
+      {tp:'反模式', type:'judge', q:'"请必须100%准确"是有效的 Prompt 约束。', a:false, exp:'错。这是空话约束，模型不知道怎么做到"100%准确"。'},
+      {tp:'技巧', type:'single', q:'Few-shot 是什么技巧？', opts:['让模型思考很久','给几个输入-输出示例让模型照做','让模型扮演角色','把任务拆成多步'], a:1, exp:'Few-shot = 少样本示例，给几个示例让模型从示例中学模式。'},
+      {tp:'调试', type:'case', q:'你让模型写产品需求文档，但它输出太长了。最快的修法是？', case:'场景：你让大模型整理用户反馈成需求文档，结果输出了 3000 字，你只要 500 字。', opts:['换一个更强的模型','在 prompt 里加"不超过 500 字"约束','多问几次取最短的','放弃用大模型'], a:1, exp:'输出太长的根因是没加字数约束。加一句"不超过 500 字"最快有效。'},
+      {tp:'反模式', type:'multi', q:'下面哪些是 Prompt 反模式？（多选）', opts:['"请必须100%准确"','一个 prompt 塞 20 条规则','给模型几个输入-输出示例','"写好一点"这种模糊指令'], a:[0,1,3], exp:'空话约束、信息过载、模糊指令都是反模式。给示例是 Few-shot，是正面技巧。'},
+      {tp:'结构', type:'prompt', q:'写一个结构化 Prompt', case:'任务：你要让大模型把一份会议纪要整理成"决策清单"。请写一段 prompt，包含角色、任务、约束、格式四要素。系统会按关键词给你模拟反馈。',
+        rubric:[
+          {k:['角色','你是','你是一个','助手','专家'], t:'设定了角色身份', g:'加一句"你是一位会议记录专家"会更好。'},
+          {k:['决策','决定','确认','待办','行动'], t:'说明了要提取什么', g:'明确说"提取所有决策项和待办事项"更清晰。'},
+          {k:['约束','不超过','限制','每个','只','排除'], t:'加了约束条件', g:'加"每条不超过2行""标注负责人"等约束更精准。'},
+          {k:['格式','表格','列表','|','编号','格式'], t:'指定了输出格式', g:'给一个表格模板或编号列表格式，输出更规范。'}
+        ]
+      },
+      {tp:'重要性', type:'single', q:'同一个模型，不同人用结果差很多，最主要原因是？', opts:['提示词质量不同','服务器位置不同','模型每天状态不同','输入法不同'], a:0, exp:'模型一样，输入决定输出。提示词质量是最大变量。'},
+      {tp:'技巧', type:'single', q:'让模型"一步一步推理再把答案写出来"的技巧叫？', opts:['Few-shot 少样本','CoT 思维链','角色扮演','温度调节'], a:1, exp:'Chain-of-Thought，对推理类任务效果显著。'},
+      {tp:'技巧', type:'judge', q:'角色扮演能提升语气和专业感，但不能给模型超越自身能力的真本事。', a:true, exp:'对。7B 模型扮演医生 ≠ 变成顶级医生，角色不改变模型能力上限。'},
+      {tp:'调试', type:'single', q:'Prompt 调试的正确做法是？', opts:['一次改五处，看整体变化','每次只改一处，看效果差异','不用调试，换更强的模型就行','随便改，凭感觉'], a:1, exp:'控制变量才能定位是哪个改动起了作用。'}
+    ]
+  },
+
+  /* ========== 第 5 章 ========== */
+  {
+    id:'c5', title:'RAG 与私有知识', level:'进阶应用', summary:'让大模型基于你的私有数据回答问题，而不是凭记忆编造。RAG 是最实用的落地技术。',
+    lesson:{
+      kicker:'第 5 章 · 进阶应用',
+      title:'RAG：给大模型装上"你的知识库"',
+      pages:[
+        {title:'为什么需要 RAG', blocks:[
+          {h:'大模型的知识盲区', p:'大模型的知识来自训练数据，有两大问题：①<b>截止日期</b>——训练后的新事它不知道 ②<b>私有数据</b>——你公司内部文档、个人笔记，它训练时没见过。'},
+          {h:'幻觉的根源之一', p:'当你问大模型它不知道的事，它不会说"不知道"，而是<b>编造一个看起来合理的答案</b>。这不是恶意，是它的生成机制决定的——它在"猜最可能的下一句"。'},
+          {h:'RAG 的思路', p:'RAG（Retrieval-Augmented Generation，检索增强生成）= <b>先检索相关资料，再让模型基于资料回答</b>。相当于考试时开卷——模型不需要"背"所有知识，只需要能"查"到正确的参考资料。'},
+          {note:'<b>核心理解</b>：RAG 不是让模型变聪明，而是给模型装上"外挂知识库"。模型负责理解和组织语言，知识库负责提供准确事实。'}
+        ]},
+        {title:'RAG 的基本流程', blocks:[
+          {h:'离线阶段：建知识库', ol:[
+            '把文档切成小块（Chunking）——每块几百字',
+            '用 Embedding 模型把每块文本转成向量',
+            '把向量存进向量数据库（Vector DB）'
+          ]},
+          {h:'在线阶段：问答', ol:[
+            '用户提问，把问题也转成向量',
+            '在向量库里找最相似的几块文本（检索 Top-K）',
+            '把找到的文本块 + 用户问题一起发给大模型',
+            '大模型基于这些材料回答（标注来源）'
+          ]},
+          {h:'一张图理解', code:'文档 → 切块 → Embedding → 向量库\n                                      ↓\n用户问题 → Embedding → 相似检索 → Top-K 文本块\n                                      ↓\n              Top-K 文本块 + 问题 → 大模型 → 回答（附来源）'},
+          {note:'<b>关键</b>：RAG 的准确度，70% 取决于检索质量——能不能找到正确的文本块。模型再强，喂错了材料也白搭。'}
+        ]},
+        {title:'向量检索与 Embedding', blocks:[
+          {h:'Embedding 是什么', p:'Embedding = 把文本转成一个数字向量（如 1536 维的浮点数组）。语义相近的文本，向量也相近。本质是把"语言的含义"编码成"数学的位置"。'},
+          {h:'相似度检索', p:'用户问题和知识库里每块文本都是向量。算向量之间的距离（余弦相似度），距离越近 = 语义越相关。取最相关的 Top-K 块作为参考材料。'},
+          {h:'为什么不只用关键词搜索', ul:[
+            '关键词搜索匹配字面，不匹配语义。搜"快乐"找不到"开心"',
+            '向量检索匹配语义。"快乐"能找到"高兴""愉悦"等近义内容',
+            '现代 RAG 通常<b>混合检索</b>：向量 + 关键词，取两者之长'
+          ]},
+          {h:'常用 Embedding 模型', p:'OpenAI text-embedding-3、BGE（中文好）、Cohore embed、Jina embed 等。选型看语言、维度、成本。中文场景 BGE 系列性价比高。'},
+          {note:'<b>给自学者的提醒</b>：Embedding 模型和大语言模型是两个东西。Embedding 模型只负责"文本→向量"，不生成回答。大模型负责理解和生成。别搞混。'}
+        ]},
+        {title:'RAG 的优化方向', blocks:[
+          {h:'检索优化', ul:[
+            '<b>切块策略</b>：按段落切 vs 按固定长度切 vs 按语义切。切得好 = 每块信息完整',
+            '<b>混合检索</b>：向量 + 关键词 + 元数据过滤',
+            '<b>重排序（Rerank）</b>：先用向量粗筛，再用专门模型精排，提高 Top-K 质量',
+            '<b>查询改写</b>：把用户口语化问题改写成更适合检索的形式'
+          ]},
+          {h:'生成优化', ul:[
+            '<b>Prompt 优化</b>：明确要求"只基于提供的材料回答，不确定就说不知道"',
+            '<b>引用来源</b>：让模型标注每句话来自哪个文档哪一段',
+            '<b>分步回答</b>：先检索→再判断材料够不够→不够再检索→够了再回答'
+          ]},
+          {h:'评估指标', p:'怎么知道 RAG 好不好？看两个维度：①<b>检索准确率</b>——找到的文本块是否相关 ②<b>生成准确率</b>——回答是否忠于材料、有没有幻觉。两个都好才是好 RAG。'},
+          {note:'<b>常见坑</b>：很多人只优化大模型 prompt，忽略了检索质量。但 RAG 的瓶颈 70% 在检索——找不到正确材料，模型再强也编。'}
+        ]},
+        {title:'RAG vs 微调，怎么选', blocks:[
+          {h:'两种方案的本质区别', table:{head:['','RAG','微调（Fine-tuning）'],rows:[
+            ['原理','给外挂知识库','改模型内部参数'],
+            ['知识更新','加新文档即可，即时','需重新训练，慢且贵'],
+            ['私有数据','存在向量库里，安全','混进训练数据，难追溯'],
+            ['适合场景','事实性问答、知识库查询','改风格、格式、特定任务能力'],
+            ['成本','中等（向量库+检索）','高（需要 GPU + 数据标注）']
+          ]}},
+          {h:'选择原则', ul:[
+            '<b>知识频繁变</b> → RAG（加文档就行）',
+            '<b>要改输出风格/格式</b> → 微调（改模型行为）',
+            '<b>要查私有文档</b> → RAG（数据留在库里可控）',
+            '<b>两者都需要</b> → 组合用：微调改风格 + RAG 供知识'
+          ]},
+          {h:'实际建议', p:'90% 的"让 AI 懂我的业务"需求，<b>先用 RAG</b>。微调门槛高、成本高、效果不确定。RAG 能解决大部分问题，且知识可追溯、可更新。'},
+          {note:'<b>给自学者的总结</b>：RAG 是目前最实用、性价比最高的 AI 落地技术。理解了它，你就理解了大部分企业 AI 应用的核心。学到这里，你已经从"知道 AI 是什么"走到了"知道怎么用 AI 解决实际问题"——这就是从入门到进阶的跨越。'}
+        ]}
+      ]
+    },
+    quiz:[
+      {tp:'动机', type:'single', q:'RAG 的核心思路是？', opts:['让模型背更多知识','先检索相关资料再让模型基于资料回答','训练一个更大的模型','用规则引擎替代模型'], a:1, exp:'RAG = 检索增强生成，先查后答。相当于开卷考试。'},
+      {tp:'优化', type:'judge', q:'RAG 的准确度主要取决于大模型的能力。', a:false, exp:'错。RAG 准确度 70% 取决于检索质量——找不到正确材料，模型再强也白搭。'},
+      {tp:'流程', type:'multi', q:'RAG 离线阶段包括哪些步骤？（多选）', opts:['把文档切成小块','用 Embedding 转向量','存入向量数据库','让大模型回答问题'], a:[0,1,2], exp:'离线阶段建知识库：切块→Embedding→存库。回答问题是在线阶段。'},
+      {tp:'向量检索', type:'single', q:'Embedding 的作用是？', opts:['把文本转成向量，语义相近的向量也相近','把向量转回文本','生成回答','切分文档'], a:0, exp:'Embedding 把文本编码成数值向量，语义相近的文本在向量空间里距离也近。'},
+      {tp:'选型', type:'case', q:'公司想让 AI 基于内部产品手册回答客服问题。手册每月更新。选 RAG 还是微调？', case:'场景：客服系统要基于公司内部产品手册回答问题，手册频繁更新（每月改版），数据不能泄露到外部。', opts:['微调，把手册混进训练数据','RAG，手册存在向量库里随时更新','两种都不行','先用微调再用 RAG'], a:1, exp:'知识频繁变 + 私有数据 + 可追溯 → RAG 是最佳选择。'},
+      {tp:'优化', type:'multi', q:'RAG 的常见优化方向有哪些？（多选）', opts:['优化切块策略','混合检索（向量+关键词）','重排序 Rerank','换更大的大模型'], a:[0,1,2], exp:'切块、混合检索、Rerank 都是检索优化。'},
+      {tp:'动机', type:'single', q:'以下哪项不属于大模型的知识盲区？', opts:['训练截止日期之后的新事件','你公司的内部文档','公开的经典百科知识','今天的实时新闻'], a:2, exp:'经典公开知识在训练数据里，它知道；新事、私有数据、实时信息才是盲区。'},
+      {tp:'流程', type:'single', q:'RAG 在线问答阶段的第一步是？', opts:['直接让大模型回答','把用户问题转成向量去检索','重新训练模型','把文档切块'], a:1, exp:'先检索后生成：问题→向量→相似检索→喂给模型。切块是离线阶段的事。'},
+      {tp:'向量检索', type:'judge', q:'向量检索按语义相似度匹配，搜"快乐"也能召回含"开心"的内容。', a:true, exp:'对。这是它优于关键词搜索的地方。'},
+      {tp:'选型', type:'case', q:'想让 AI 用公司统一的品牌口吻回复邮件（风格固定、知识不变），优先选？', case:'场景：客服邮件自动化，要求语气风格严格符合品牌规范。', opts:['RAG','微调 Fine-tuning','两者都不行','换更大的模型'], a:1, exp:'改风格/格式是微调的强项；RAG 解决的是知识问题，不是风格问题。'}
+    ]
+  }
+];
+
+const PASS = 60;
+const DAILY_GOAL = 50;
+const LS_KEY = 'ai_learn_progress_v3';
+const LS_KEY_OLD = 'ai_learn_progress_v2';
+let prog = loadProg();
+let view = {name:'home'};
+
+/* ---------- progress + xp + daily ---------- */
+function uid(){return 'u_'+Math.random().toString(36).slice(2,10)}
+function todayKey(){const d=new Date();const p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());}
+function dstat(){const k=todayKey();if(!prog.daily[k])prog.daily[k]={pages:0,qs:0,ok:0,xp:0,weak:[],exams:0};return prog.daily[k];}
+function level(){return Math.floor(prog.xp/100)+1;}
+function xpToNext(){return 100-(prog.xp%100);}
+function addXp(n){prog.xp+=n;dstat().xp+=n;saveProg();topRender();}
+function award(n){addXp(n);if(view.xpEarned!==undefined)view.xpEarned+=n;}
+
+function loadProg(){
+  try{
+    const r=JSON.parse(localStorage.getItem(LS_KEY));
+    if(r&&r.version===3){if(!r.daily)r.daily={};if(!r.exams)r.exams=[];return r;}
+  }catch(e){}
+  // migrate v2
+  try{
+    const old=JSON.parse(localStorage.getItem(LS_KEY_OLD));
+    if(old&&old.version===2){
+      const p={version:3,learnerId:old.learnerId||uid(),xp:0,lastUpdated:new Date().toISOString(),chapters:{},daily:{},exams:[]};
+      Object.entries(old.chapters||{}).forEach(([k,v])=>{
+        p.chapters[k]={passed:!!v.passed,best:v.best||0,total:v.total||0,attempts:v.attempts||0,seenQs:[],readPages:[]};
+        if(v.passed)p.xp+=50;
+      });
+      return p;
+    }
+  }catch(e){}
+  return {version:3,learnerId:uid(),lastUpdated:new Date().toISOString(),chapters:{},daily:{},exams:[],xp:0};
+}
+function saveProg(){prog.lastUpdated=new Date().toISOString();localStorage.setItem(LS_KEY,JSON.stringify(prog));}
+function chP(id){
+  if(!prog.chapters[id])prog.chapters[id]={passed:false,best:0,total:0,attempts:0,seenQs:[],readPages:[]};
+  if(!prog.chapters[id].seenQs)prog.chapters[id].seenQs=[];
+  if(!prog.chapters[id].readPages)prog.chapters[id].readPages=[];
+  return prog.chapters[id];
+}
+function unlocked(i){if(i===0)return true;return chP(COURSES[i-1].id).passed;}
+function overall(){
+  let pct=0;COURSES.forEach(c=>{const p=chP(c.id);pct+=p.total?p.best/p.total*100:0;});
+  return Math.round(pct/COURSES.length);
+}
+function topRender(){
+  const p=overall();const lv=level();
+  document.getElementById('topBar').style.width=p+'%';
+  document.getElementById('topLv').textContent='Lv.'+lv;
+  document.getElementById('topXp').textContent='⚡ '+prog.xp;
+}
+
+/* ---------- shuffle + sampling ---------- */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function sampleQuiz(c,size){
+  const p=chP(c.id);
+  const idx=c.quiz.map((_,i)=>i);
+  const unseen=shuffle(idx.filter(i=>!p.seenQs.includes(i)));
+  let picks=unseen.slice(0,size);
+  if(picks.length<size)picks=picks.concat(shuffle(idx.filter(i=>p.seenQs.includes(i))).slice(0,size-picks.length));
+  p.seenQs=p.seenQs.concat(picks);
+  if(p.seenQs.length>=c.quiz.length)p.seenQs=picks.slice();
+  return picks.map(i=>({q:c.quiz[i]}));
+}
+function sampleExam(){
+  const sel=Object.entries(view.examSel).filter(([k,v])=>v.length>0);
+  let pool=[];
+  sel.forEach(([cid,tps])=>{
+    const c=COURSES.find(x=>x.id===cid);const p=chP(cid);
+    const cands=c.quiz.map((q,i)=>({q,i})).filter(x=>tps.includes(x.q.tp));
+    const unseen=shuffle(cands.filter(x=>!p.seenQs.includes(x.i)));
+    let picks=unseen.slice(0,3);
+    if(picks.length<3)picks=picks.concat(shuffle(cands.filter(x=>p.seenQs.includes(x.i))).slice(0,3-picks.length));
+    p.seenQs=p.seenQs.concat(picks.map(x=>x.i));
+    if(p.seenQs.length>=c.quiz.length)p.seenQs=picks.map(x=>x.i);
+    pool=pool.concat(picks.map(x=>({q:x.q})));
+  });
+  return shuffle(pool).slice(0,12);
+}
+function topicsOf(c){return [...new Set(c.quiz.map(q=>q.tp))];}
+
+/* ---------- render home ---------- */
+function renderHome(){
+  view={name:'home'};
+  topRender();
+  const a=document.getElementById('app');
+  const lv=level(),xtn=xpToNext(),d=dstat();
+  const goalPct=Math.min(100,Math.round(d.xp/DAILY_GOAL*100));
+
+  let h='';
+  // hero
+  h+=`<div class="hero">
+    <div class="h-top"><span class="h-lv">Lv.${lv}</span><span class="h-xp">⚡ ${prog.xp} XP</span></div>
+    <h1>从零搞懂 AI · 大模型 · Agent</h1>
+    <p>讲解、闯关、自组考试，三模式随心切换 · 智能抽题不重复</p>
+    <div class="h-next"><div class="h-next-bar"><i style="width:${100-xtn}%"></i></div><span>再得 <b>${xtn}</b> XP 升 Lv.${lv+1} · 整体完成度 <b>${overall()}%</b></span></div>
+  </div>`;
+
+  // daily
+  h+=`<div class="daily">
+    <div class="d-head"><span>📅 今日学习</span><span class="d-date">${todayKey()}</span></div>
+    <div class="d-bar"><i style="width:${goalPct}%"></i></div>
+    <div class="d-goal">每日目标 ${DAILY_GOAL} XP · 已得 ${d.xp} XP${goalPct>=100?' · 🎉 达标':''}</div>
+    <div class="d-chips">
+      <span class="chip">📖 ${d.pages} 页</span>
+      <span class="chip ok">✅ ${d.ok}/${d.qs} 题</span>
+      ${d.exams?`<span class="chip ex">🎯 考试 ${d.exams} 次</span>`:''}
+    </div>
+    ${d.weak.length?`<div class="d-weak">📌 待加强：${d.weak.map(x=>'<i>'+x+'</i>').join('')}</div>`:''}
+  </div>`;
+
+  // mode grid
+  h+=`<div class="mode-grid">
+    <button class="mode-card m-read" onclick="openLibrary()"><span class="m-ic">📖</span><h3>讲解</h3><p>全部知识<br>自由翻看</p></button>
+    <button class="mode-card m-quiz" onclick="openChallengeSelect()"><span class="m-ic">⚔️</span><h3>闯关</h3><p>任选章节<br>随到随战</p></button>
+    <button class="mode-card m-exam" onclick="openExamSelect()"><span class="m-ic">🎯</span><h3>考试</h3><p>自选知识点<br>组卷测验</p></button>
+  </div>`;
+
+  // chapter progress chips
+  h+=`<div class="sec-title"><h2>🗺️ 章节进度</h2><span>${COURSES.filter(c=>chP(c.id).passed).length}/${COURSES.length} 已通关</span></div>`;
+  h+=`<div class="path-chips">`;
+  COURSES.forEach((c,i)=>{
+    const p=chP(c.id);const col=CH_COLORS[i%CH_COLORS.length];
+    const st=p.passed?'done':(p.attempts?'try':'');
+    h+=`<button class="path-chip ${st}" onclick="openLibrary()" style="--c1:${col[0]};--c2:${col[1]}"><span class="pc-no">${i+1}</span>${c.title}</button>`;
+  });
+  h+=`</div>`;
+
+  h+=`<div class="foot">单文件离线工作台 · 数据存本机 · <b>v3</b></div>`;
+  a.innerHTML=h;
+}
+
+/* ---------- library (讲解) ---------- */
+function openLibrary(){
+  view={name:'library'};
+  renderLibrary();
+}
+function renderLibrary(){
+  topRender();
+  const a=document.getElementById('app');
+  let h=`<button class="back" onclick="renderHome()">‹ 返回</button>`;
+  h+=`<div class="exsel"><h2>📖 知识讲解</h2><p>全部章节自由翻看，无需解锁 · 首次阅读每页 +2 XP</p></div>`;
+  COURSES.forEach((c,i)=>{
+    const p=chP(c.id);const col=CH_COLORS[i%CH_COLORS.length];
+    const read=p.readPages.length,totalP=c.lesson.pages.length;
+    const readPct=Math.round(read/totalP*100);
+    h+=`<div class="ch-card">
+      <div class="ch-head" onclick="openChapter('${c.id}')">
+        <div class="ch-num" style="background:linear-gradient(135deg,${col[0]},${col[1]})">${i+1}</div>
+        <div class="ch-info">
+          <div class="ch-top"><h3>${c.title}</h3><span class="badge ${p.passed?'ok':'go'}">${p.passed?'✓ 已通关':'自由学习'}</span></div>
+          <p>${c.summary}</p>
+          <div class="ch-meta"><span class="m">${read}/${totalP} 页已读</span>
+          <div class="mini-bar" style="margin-left:auto"><i style="width:${readPct}%"></i></div></div>
+        </div>
+      </div>
+    </div>`;
+  });
+  a.innerHTML=h;window.scrollTo(0,0);
+}
+
+/* ---------- challenge select (闯关) ---------- */
+function openChallengeSelect(){
+  view={name:'challenge'};
+  renderChallengeSelect();
+}
+function renderChallengeSelect(){
+  topRender();
+  const a=document.getElementById('app');
+  let h=`<button class="back" onclick="renderHome()">‹ 返回</button>`;
+  h+=`<div class="exsel"><h2>⚔️ 自选闯关</h2><p>任选一章开战 · 抽 6 题（优先没做过的）· 通关 +30 XP</p></div>`;
+  COURSES.forEach((c,i)=>{
+    const p=chP(c.id);const col=CH_COLORS[i%CH_COLORS.length];
+    let st;
+    if(p.passed)st=`<span class="badge ok">✓ 通关 ${p.total?Math.round(p.best/p.total*100):0}%</span>`;
+    else if(p.attempts)st=`<span class="badge go">最佳 ${p.total?Math.round(p.best/p.total*100):0}%</span>`;
+    else st=`<span class="badge lock">未挑战</span>`;
+    h+=`<div class="ch-card">
+      <div class="ch-head" onclick="startQuiz('${c.id}')">
+        <div class="ch-num" style="background:linear-gradient(135deg,${col[0]},${col[1]})">${i+1}</div>
+        <div class="ch-info">
+          <div class="ch-top"><h3>${c.title}</h3>${st}</div>
+          <p>${c.summary}</p>
+          <div class="ch-meta"><span class="m">题库 ${c.quiz.length} 题 · 抽 6 题</span></div>
+        </div>
+      </div>
+    </div>`;
+  });
+  a.innerHTML=h;window.scrollTo(0,0);
+}
+
+/* ---------- chapter / lesson ---------- */
+function openChapter(id,page){
+  const i=COURSES.findIndex(c=>c.id===id);if(i<0)return;
+  if(page===undefined)page=0;
+  view={name:'lesson',cid:id,page:page,xpEarned:0};
+  renderLesson();
+}
+function renderLesson(){
+  const c=curCh();if(!c)return;
+  const pg=c.lesson.pages[view.page];if(!pg)return;
+  // mark page read, award xp first time
+  const p=chP(c.id);
+  if(!p.readPages.includes(view.page)){p.readPages.push(view.page);addXp(2);dstat().pages++;}
+  topRender();
+  const a=document.getElementById('app');
+  let h=`<button class="back" onclick="openLibrary()">‹ 返回</button>`;
+  h+=`<div class="lesson"><div class="kicker">${c.lesson.kicker}</div><h2>${c.lesson.title}</h2>`;
+  h+=`<div class="page-bar"><span class="pgs">第 <b>${view.page+1}</b> / ${c.lesson.pages.length} 页</span>`;
+  h+=`<button class="toc-btn" onclick="openToc()">☰ 目录</button></div>`;
+  h+=`<div class="page-title">${pg.title}</div>`;
+  h+=`<div class="lesson-body">`;
+  pg.blocks.forEach(b=>{
+    if(b.h)h+=`<h4>${b.h}</h4>`;
+    if(b.p)h+=`<p>${b.p}</p>`;
+    if(b.ul){h+=`<ul>`;b.ul.forEach(x=>h+=`<li>${x}</li>`);h+=`</ul>`;}
+    if(b.ol){h+=`<ol>`;b.ol.forEach(x=>h+=`<li>${x}</li>`);h+=`</ol>`;}
+    if(b.note)h+=`<div class="note">${b.note}</div>`;
+    if(b.code)h+=`<div class="code-block">${escapeHtml(b.code)}</div>`;
+    if(b.table){const t=b.table;h+=`<div class="table-wrap"><table><tr>`;
+      t.head.forEach(x=>h+=`<th>${x}</th>`);h+=`</tr>`;
+      t.rows.forEach(r=>{h+=`<tr>`;r.forEach(x=>h+=`<td>${x}</td>`);h+=`</tr>`;});
+      h+=`</table></div>`;}
+  });
+  h+=`</div>`;
+
+  const total=c.lesson.pages.length,isLast=view.page>=total-1;
+  h+=`<div class="lesson-nav">`;
+  h+=`<button class="nav-btn ghost" ${view.page>0?`onclick="jumpPage(${view.page-1})"`:'disabled'}>‹ 上一页</button>`;
+  h+=`<div class="dots">`;
+  for(let d=0;d<total;d++){h+=`<span class="dot ${d===view.page?'on':''}"></span>`;}
+  h+=`</div>`;
+  if(!isLast){
+    h+=`<button class="nav-btn pri" onclick="jumpPage(${view.page+1})">下一页 ›</button>`;
+  }else{
+    h+=`<button class="nav-btn pri" onclick="startQuiz('${c.id}')">${p.passed?'重新闯关':'开始闯关'} ›</button>`;
+  }
+  h+=`</div></div>`;
+
+  if(isLast){
+    const ni=COURSES.findIndex(x=>x.id===c.id)+1;
+    h+=`<div class="row">`;
+    if(ni<COURSES.length)h+=`<button class="btn btn-pri" onclick="openChapter('${COURSES[ni].id}')">下一章 ›</button>`;
+    else h+=`<button class="btn btn-pri" onclick="renderHome()">全部通关 🎉</button>`;
+    h+=`</div>`;
+  }
+  a.innerHTML=h;window.scrollTo(0,0);
+}
+function jumpPage(p){view.page=p;renderLesson();}
+function curCh(){return COURSES.find(x=>x.id===view.cid);}
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ---------- TOC ---------- */
+function openToc(){
+  const c=curCh();if(!c)return;
+  document.getElementById('tocTitle').textContent=c.lesson.title+' · 目录';
+  let h='';
+  c.lesson.pages.forEach((pg,i)=>{
+    h+=`<button class="toc-item ${i===view.page?'cur':''}" onclick="jumpPageToc(${i})"><span class="toc-no">${i+1}</span>${pg.title}</button>`;
+  });
+  document.getElementById('tocList').innerHTML=h;
+  document.getElementById('tocSheet').classList.add('open');
+}
+function jumpPageToc(p){closeToc();jumpPage(p);}
+function closeToc(){document.getElementById('tocSheet').classList.remove('open');}
+
+/* ---------- quiz / exam ---------- */
+const TYPE_LABEL={single:'单选',multi:'多选',judge:'判断',case:'案例分析',prompt:'写 Prompt'};
+function qOpts(q){if(q.type==='judge')return ['正确','错误'];return q.opts||[];}
+function qAns(q){if(q.type==='judge')return q.a?0:1;return q.a;}
+
+function startQuiz(id){
+  const c=COURSES.find(x=>x.id===id);
+  const ret=view.name==='lesson'?'lesson':'challenge';
+  view={name:'quiz',mode:'quiz',cid:id,ret,pool:sampleQuiz(c,6),qi:0,sel:[],answered:false,score:0,hintQ:false,lastFb:null,log:[],qGain:{},xpDone:{},xpEarned:0};
+  saveProg();renderQ();
+}
+function startExam(){
+  const sel=Object.entries(view.examSel).filter(([k,v])=>v.length>0);
+  if(!sel.length){flash('先勾选至少一个知识点');return;}
+  view={name:'quiz',mode:'exam',cid:null,pool:sampleExam(),qi:0,sel:[],answered:false,score:0,hintQ:false,lastFb:null,log:[],qGain:{},xpDone:{},xpEarned:0,examChs:sel.map(s=>s[0])};
+  saveProg();renderQ();
+}
+function curQ(){return view.pool[view.qi]?view.pool[view.qi].q:null;}
+
+function renderQ(){
+  const q=curQ();if(!q)return finish();
+  topRender();
+  const total=view.pool.length;
+  const a=document.getElementById('app');
+  let h=`<button class="back" onclick="confirmBack()">‹ ${view.mode==='exam'?'返回选题':(view.ret==='lesson'?'返回讲解':'返回闯关')}</button>`;
+  h+=`<div class="qcard">
+    <div class="qmeta"><span class="qtype">${TYPE_LABEL[q.type]}</span><span>${view.qi+1} / ${total} · ${view.mode==='exam'?'考试':'闯关'}</span></div>
+    <h3>${q.q}</h3>`;
+  if(q.case)h+=`<div class="qcase">${q.case}</div>`;
+
+  if(q.type==='prompt'){
+    h+=`<textarea class="ta" id="promptTa" placeholder="在这里写你的提示词…" ${view.answered?'disabled':''}>${view.sel[0]?escapeHtml(view.sel[0]):''}</textarea>`;
+    if(view.answered){
+      h+=renderPromptFb(q);
+      h+=`<div class="row"><button class="btn btn-ghost" onclick="retryQ()">再改一版</button><button class="btn btn-pri" onclick="nextQ()">下一题 ›</button></div>`;
+    }else{
+      h+=`<div class="row"><button class="btn btn-ghost" onclick="toggleHint()">提示</button><button class="btn btn-pri" onclick="submitPrompt()">提交</button></div>`;
+    }
+  }else{
+    h+=`<div class="opts">`;
+    qOpts(q).forEach((o,i)=>{
+      const sel=view.sel.includes(i);
+      let ex='';if(view.answered){
+        const ans=qAns(q);const correct=Array.isArray(ans)?ans.includes(i):ans===i;
+        if(correct)ex='right';else if(sel)ex='wrong';
+      }
+      h+=`<button class="opt ${sel?'sel':''} ${ex}" ${view.answered?'disabled':''} onclick="pick(${i})">
+        <span class="key">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`;
+    });
+    h+=`</div>`;
+    if(view.answered){
+      const correct=checkAns(q);
+      h+=`<div class="feedback ${correct?'fb-ok':'fb-no'}"><b>${correct?'答对了！':'没答对'}</b>${q.exp? q.exp : (correct?'稳。':'再想想，可重试。')}</div>`;
+      h+=`<div class="row"><button class="btn btn-ghost" onclick="retryQ()">重试</button><button class="btn btn-pri" onclick="nextQ()">下一题 ›</button></div>`;
+    }else{
+      h+=`<div class="row"><button class="btn btn-ghost" onclick="toggleHint()">提示</button><button class="btn btn-pri" onclick="submitAns()">提交答案</button></div>`;
+    }
+  }
+  if(view.hintQ&&q.hint)h+=`<div class="hint">💡 ${q.hint}</div>`;
+  if(view.hintQ&&q.type==='prompt')h+=`<div class="hint">💡 好的提示词通常含：角色、可用工具/约束、分步要求、验证/汇报。</div>`;
+  h+=`<div class="score-strip"><span class="lab">本卷得分</span><span class="val">${view.score} / ${total}</span></div>`;
+  h+=`</div>`;
+  a.innerHTML=h;window.scrollTo(0,0);
+}
+
+function pick(i){
+  if(view.answered)return;
+  const q=curQ();
+  if(q.type==='multi'){view.sel=view.sel.includes(i)?view.sel.filter(x=>x!==i):[...view.sel,i];}
+  else{view.sel=[i];}
+  renderQ();
+}
+function toggleHint(){view.hintQ=true;renderQ();}
+function submitAns(){
+  const q=curQ();if(!view.sel.length){flash('先选一个答案');return;}
+  view.answered=true;
+  const gain=checkAns(q)?(view.hintQ?0.5:1):0;
+  view.score=view.score-(view.qGain[view.qi]||0)+gain;view.qGain[view.qi]=gain;
+  if(!view.xpDone[view.qi]){
+    view.xpDone[view.qi]=1;
+    const xp=gain>=1?10:(gain>0?5:0);if(xp)award(xp);
+    const d=dstat();d.qs++;if(gain>0)d.ok++;
+    view.log.push({tp:q.tp||'综合',ok:gain>0});
+  }
+  renderQ();
+}
+function checkAns(q){
+  if(q.type==='prompt')return true;
+  const ans=qAns(q);const a=Array.isArray(ans)?ans:[ans];
+  return view.sel.length===a.length && view.sel.every(x=>a.includes(x));
+}
+function retryQ(){view.sel=[];view.answered=false;view.hintQ=false;renderQ();}
+
+function submitPrompt(){
+  const v=(document.getElementById('promptTa').value||'').trim();
+  if(v.length<8){flash('提示词太短了，认真写几句');return;}
+  view.sel=[v];view.answered=true;const fb=evalPrompt(curQ(),v);view.lastFb=fb;
+  view.score=view.score-(view.qGain[view.qi]||0)+fb.score;view.qGain[view.qi]=fb.score;
+  if(!view.xpDone[view.qi]){
+    view.xpDone[view.qi]=1;
+    const xp=Math.round(fb.score*10);if(xp)award(xp);
+    const d=dstat();d.qs++;if(fb.score>=0.7)d.ok++;
+    view.log.push({tp:curQ().tp||'综合',ok:fb.score>=0.7});
+  }
+  renderQ();
+}
+function evalPrompt(q,text){
+  let hit=0,total=q.rubric.length;const lines=[];
+  q.rubric.forEach(r=>{
+    const ok=r.k.some(k=>text.toLowerCase().includes(k.toLowerCase()));
+    if(ok){hit++;lines.push('✓ '+r.t);}else{lines.push('✗ '+r.g);}
+  });
+  const score=hit===total?1:(hit>=total-1?0.7:(hit>=1?0.4:0));
+  return {hit,total,score,lines};
+}
+function renderPromptFb(q){
+  const fb=view.lastFb;const ok=fb.score===1;
+  let h=`<div class="feedback ${ok?'fb-ok':'fb-info'}"><b>${ok?'写得很到位！':'还差一点，按下面的点改改'}</b>`;
+  h+=`命中 ${fb.hit}/${fb.total} 个要点（本卷得分 +${fb.score}）</div>`;
+  h+=`<div class="hint" style="margin-top:8px">${fb.lines.join('<br>')}</div>`;
+  return h;
+}
+
+function nextQ(){
+  view.qi++;view.sel=[];view.answered=false;view.hintQ=false;view.lastFb=null;
+  if(view.qi>=view.pool.length)finish();else renderQ();
+}
+
+function finish(){
+  const total=view.pool.length;
+  const pct=Math.round(view.score/total*100);
+  const pass=pct>=PASS;
+  if(view.mode==='quiz'){
+    const c=curCh(),p=chP(view.cid);
+    p.total=total;p.attempts++;p.best=Math.max(p.best,view.score);
+    p.passed=Math.round(p.best/p.total*100)>=PASS;
+    if(pass)award(30);
+  }else{
+    award(20);dstat().exams++;
+    prog.exams.push({d:todayKey(),chs:view.examChs.length,pct});
+    if(prog.exams.length>20)prog.exams=prog.exams.slice(-20);
+  }
+  // analysis
+  const ana=analyze();
+  ana.filter(a=>a.n>0&&a.ok/a.n<0.6).forEach(a=>{const w=dstat().weak;if(!w.includes(a.tp))w.push(a.tp);});
+  saveProg();topRender();
+  renderResult(pct,pass,total,ana);
+}
+function analyze(){
+  const by={};
+  view.log.forEach(l=>{if(!by[l.tp])by[l.tp]={tp:l.tp,ok:0,n:0};by[l.tp].n++;if(l.ok)by[l.tp].ok++;});
+  return Object.values(by).sort((a,b)=>(a.ok/a.n)-(b.ok/b.n));
+}
+function renderResult(pct,pass,total,ana){
+  const a=document.getElementById('app');
+  const C=2*Math.PI*52;
+  const offset=C*(1-pct/100);
+  let h=`<div class="result">
+    <div class="r-ring"><svg viewBox="0 0 120 120"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7c3aed"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs>
+      <circle class="bg" cx="60" cy="60" r="52"/><circle class="fg" cx="60" cy="60" r="52" stroke-dasharray="${C}" stroke-dashoffset="${offset}"/></svg><span class="big">${pct}%</span></div>
+    <h2>${pass?(view.mode==='exam'?'考试通关！':'闯关通关！'):(pct>=40?'差一点':'再练练')}</h2>
+    <p class="sub">答对 ${view.score}/${total} · ${view.score>=total?'完美！':view.score>=total*0.6?'稳。':'加油'}</p>
+    <span class="xp-gain">⚡ +${view.xpEarned} XP</span>
+    <div class="ana">
+      <h4>📊 知识点掌握分析</h4>`;
+  if(!ana.length)h+=`<div style="font-size:12px;color:var(--muted)">无数据</div>`;
+  else ana.forEach(x=>{
+    const r=x.ok/x.n;const cls=r>=0.8?'g':(r>=0.6?'a':'r');
+    h+=`<div class="ana-row"><span class="ana-tp">${x.tp}</span><div class="ana-bar ${cls}"><i style="width:${Math.round(r*100)}%"></i></div><span class="ana-n">${x.ok}/${x.n}</span></div>`;
+  });
+  const weak=ana.filter(x=>x.n>0&&x.ok/x.n<0.6).map(x=>x.tp);
+  if(weak.length)h+=`<div class="weak-line">📌 需加强：${weak.map(x=>'<i>'+x+'</i>').join('')}</div>`;
+  h+=`</div>`;
+  h+=`<div class="row">`;
+  if(view.mode==='quiz'){
+    h+=`<button class="btn btn-ghost" onclick="openChapter('${view.cid}')">复习讲解</button>`;
+    h+=`<button class="btn btn-amb" onclick="startQuiz('${view.cid}')">再来一次</button>`;
+    {const i=COURSES.findIndex(x=>x.id===view.cid);if(i+1<COURSES.length)h+=`<button class="btn btn-pri" onclick="openChapter('${COURSES[i+1].id}')">下一章 ›</button>`;}
+  }else{
+    h+=`<button class="btn btn-amb" onclick="openExamSelect()">再组一次</button>`;
+    h+=`<button class="btn btn-pri" onclick="renderHome()">返回首页</button>`;
+  }
+  h+=`</div></div>`;
+  a.innerHTML=h;window.scrollTo(0,0);
+}
+
+function confirmBack(){
+  if(view.answered||view.sel.length){if(!confirm('返回将放弃当前作答进度，确定？'))return;}
+  if(view.mode==='exam')openExamSelect();
+  else if(view.ret==='lesson')openChapter(view.cid);
+  else openChallengeSelect();
+}
+
+/* ---------- exam select ---------- */
+function openExamSelect(){
+  view={name:'examSelect',examSel:{},expCh:null};
+  renderExamSelect();
+}
+function renderExamSelect(){
+  topRender();
+  const a=document.getElementById('app');
+  let h=`<button class="back" onclick="renderHome()">‹ 返回</button>`;
+  h+=`<div class="exsel">
+    <h2>🎯 自组考试</h2>
+    <p>勾选要考核的知识点（可勾整章或展开勾具体知识点）</p>`;
+  COURSES.forEach((c,i)=>{
+    const tps=topicsOf(c);
+    const sel=view.examSel[c.id]||[];
+    const allOn=sel.length===tps.length;
+    const isOpen=view.expCh===c.id;
+    const col=CH_COLORS[i%CH_COLORS.length];
+    h+=`<div class="exch ${allOn?'on':''} ${isOpen?'open':''}">
+      <div class="exch-h" onclick="toggleExamCh('${c.id}')">
+        <span class="cb"></span>
+        <div class="ch-num" style="background:linear-gradient(135deg,${col[0]},${col[1]});width:36px;height:36px;font-size:14px">${i+1}</div>
+        <div class="exch-info"><h3>${c.title}</h3><p>${tps.length} 个知识点 · 题库 ${c.quiz.length} 题</p></div>
+        <span class="exch-arrow" onclick="event.stopPropagation();toggleExp('${c.id}')">▾</span>
+      </div>
+      <div class="topics">`;
+    tps.forEach(tp=>{
+      const on=sel.includes(tp);
+      h+=`<span class="tp-chip ${on?'on':''}" onclick="event.stopPropagation();toggleTp('${c.id}','${tp}')">${tp}</span>`;
+    });
+    h+=`</div></div>`;
+  });
+  const totalSel=Object.values(view.examSel).reduce((s,v)=>s+v.length,0);
+  h+=`<div class="row">
+    <button class="btn btn-ghost" onclick="renderHome()">取消</button>
+    <button class="btn btn-pri" onclick="startExam()">开始考试（${totalSel} 知识点）</button>
+  </div></div>`;
+  a.innerHTML=h;window.scrollTo(0,0);
+}
+function toggleExamCh(cid){
+  const c=COURSES.find(x=>x.id===cid);
+  const tps=topicsOf(c);
+  const cur=view.examSel[cid]||[];
+  if(cur.length===tps.length)view.examSel[cid]=[];else view.examSel[cid]=tps.slice();
+  renderExamSelect();
+}
+function toggleExp(cid){view.expCh=view.expCh===cid?null:cid;renderExamSelect();}
+function toggleTp(cid,tp){
+  const c=COURSES.find(x=>x.id===cid);
+  const cur=view.examSel[cid]||[];
+  const tps=topicsOf(c);
+  if(cur.includes(tp)){view.examSel[cid]=cur.filter(x=>x!==tp);}else{view.examSel[cid]=cur.concat([tp]);}
+  // opening if not
+  if(view.expCh!==cid)view.expCh=cid;
+  renderExamSelect();
+}
+
+/* ---------- sheets ---------- */
+function openSheet(){document.getElementById('sheet').classList.add('open');}
+function closeSheet(){document.getElementById('sheet').classList.remove('open');}
+function exportProg(){
+  const blob=new Blob([JSON.stringify(prog,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const d=new Date();const pad=n=>String(n).padStart(2,'0');
+  const name=`ai-progress-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}.json`;
+  const link=document.createElement('a');link.href=url;link.download=name;link.click();
+  URL.revokeObjectURL(url);closeSheet();flash('已导出 '+name);
+}
+function importProg(file){
+  const fr=new FileReader();
+  fr.onload=()=>{
+    try{
+      const r=JSON.parse(fr.result);
+      if(r.version!==3){flash('文件版本不匹配（需要 v3），导入失败');return;}
+      if(!r.chapters)throw 0;
+      prog=r;if(!prog.daily)prog.daily={};if(!prog.exams)prog.exams=[];saveProg();topRender();renderHome();closeSheet();flash('进度已导入');
+    }catch(e){flash('文件格式不对，导入失败');}
+  };
+  fr.readAsText(file);
+}
+function resetProg(){
+  if(!confirm('确定清空所有进度？此操作不可撤销。'))return;
+  localStorage.removeItem(LS_KEY);prog=loadProg();renderHome();closeSheet();flash('已重置');
+}
+function flash(msg){const d=document.createElement('div');d.textContent=msg;d.style.cssText='position:fixed;left:50%;top:80px;transform:translateX(-50%);background:#1E1B4B;color:#fff;padding:10px 16px;border-radius:12px;z-index:99;font-size:13px;font-weight:700';document.body.appendChild(d);setTimeout(()=>d.remove(),1600);}
+
+document.getElementById('menuBtn').onclick=openSheet;
+document.getElementById('exportBtn').onclick=exportProg;
+document.getElementById('importBtn').onclick=()=>document.getElementById('fileInput').click();
+document.getElementById('fileInput').onchange=e=>{if(e.target.files[0])importProg(e.target.files[0]);e.target.value='';};
+document.getElementById('resetBtn').onclick=resetProg;
+document.querySelectorAll('[data-close]').forEach(el=>el.onclick=closeSheet);
+document.querySelectorAll('[data-close-toc]').forEach(el=>el.onclick=closeToc);
+
+renderHome();
+</script>
+</body>
+</html>
