@@ -163,43 +163,67 @@ header.top{position:sticky;top:0;z-index:20;background:var(--grad);color:#fff;
 .ch-lock{text-align:center;padding:var(--s12);color:var(--muted);font-size:12px;font-weight:700;background:var(--soft2)}
 
 /* ====== lesson ====== */
-.lesson{background:var(--card);border:1px solid var(--line);border-radius:var(--r20);
-  padding:var(--s24);margin-top:var(--s16);box-shadow:var(--shadow)}
-.lesson .kicker{font-family:var(--mono);font-size:11px;color:var(--g1);font-weight:700;letter-spacing:.5px}
-.lesson h2{font-size:20px;font-weight:900;margin:var(--s4) 0 var(--s4);line-height:1.3}
-.page-bar{display:flex;align-items:center;justify-content:space-between;gap:var(--s8);
-  margin:var(--s4) 0 var(--s16);padding-bottom:var(--s12);border-bottom:1px dashed var(--line)}
-.page-bar .pgs{font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:700}
-.page-bar .pgs b{color:var(--g1);font-size:15px}
-.toc-btn{font-size:12px;color:var(--g1);font-weight:800;display:flex;align-items:center;gap:4px;background:var(--soft);padding:5px 10px;border-radius:99px}
-.page-title{font-size:16px;font-weight:800;color:var(--g1);margin:0 0 var(--s12);padding:6px 12px;background:var(--soft);border-radius:var(--r8);display:inline-block}
-.lesson-body h4{font-size:14px;font-weight:800;margin:var(--s20) 0 var(--s8);color:var(--g1)}
-.lesson-body p{margin:0 0 var(--s12);font-size:14.5px;color:#3A2F6B;line-height:1.7}
+.lcard{margin:0 var(--s16);background:var(--card);border-radius:var(--r24);
+  padding:var(--s24) var(--s20) var(--s20);margin-top:var(--s16);
+  box-shadow:0 8px 28px rgba(124,58,237,.08)}
+.lesson .kicker{display:inline-flex;align-items:center;gap:6px;font-size:11px;
+  background:var(--soft2);color:var(--g1);font-weight:700;padding:5px 10px;
+  border-radius:99px;font-family:var(--mono);letter-spacing:.3px;margin-bottom:var(--s12)}
+.lesson .kicker::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--g1)}
+.lesson h2{font-size:22px;font-weight:900;margin:0 0 var(--s8);line-height:1.35;color:var(--text)}
+.l-meta{display:flex;align-items:center;gap:var(--s16);font-size:12px;color:var(--muted);
+  font-weight:600;margin-bottom:var(--s20);flex-wrap:wrap}
+.l-meta .i{display:inline-flex;align-items:center;gap:4px}
+.l-meta b{color:var(--text);font-weight:700}
+.lesson-body{margin-top:var(--s8)}
+.lesson-body h4{font-size:15px;font-weight:800;margin:var(--s20) 0 var(--s8);color:var(--text)}
+.lesson-body p{margin:0 0 var(--s12);font-size:14.5px;color:#374151;line-height:1.75}
 .lesson-body ul,.lesson-body ol{margin:0 0 var(--s12);padding-left:var(--s20)}
-.lesson-body li{margin-bottom:var(--s4);font-size:14.5px;color:#3A2F6B;line-height:1.7}
+.lesson-body li{margin-bottom:var(--s6);font-size:14.5px;color:#374151;line-height:1.75}
 .lesson-body li b{color:var(--g1)}
-.note{background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-left:4px solid var(--accent);padding:var(--s12) var(--s16);
-  border-radius:0 var(--r12) var(--r12) 0;margin:var(--s16) 0;font-size:13.5px;color:#7C2D12;line-height:1.6}
-.note b{color:#7C2D12}
+
+/* 💡 关键点（讲解页用，米黄色，比 .note 更柔和） */
+.tip{background:linear-gradient(135deg,#FEF9E7,#FEF3C7);border:1px solid #FDE68A;
+  border-radius:var(--r12);padding:var(--s12) var(--s16);margin:var(--s16) 0;
+  font-size:13.5px;color:#7C2D12;line-height:1.65}
+.tip .hd{color:#92400E;display:block;margin-bottom:6px;font-weight:800;font-size:13px}
+
+/* ⚠️ 警示（讲解页用，浅红） */
+.warn{background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--r12);
+  padding:var(--s12) var(--s16);margin:var(--s16) 0;font-size:13.5px;
+  color:#991B1B;line-height:1.65}
+.warn .hd{color:#7F1D1D;display:block;margin-bottom:6px;font-weight:800;font-size:13px}
+
 .code-block{background:#1E1B4B;color:#C4B5FD;border-radius:var(--r12);padding:var(--s12) var(--s16);
   margin:var(--s12) 0;font-family:var(--mono);font-size:12.5px;overflow-x:auto;white-space:pre-wrap;line-height:1.6}
-.table-wrap{overflow-x:auto;margin:var(--s12) 0;border-radius:var(--r8);border:1px solid var(--line)}
-table{border-collapse:collapse;width:100%;font-size:13px;background:#fff}
-th,td{border-bottom:1px solid var(--line);padding:var(--s8) var(--s12);text-align:left}
-tr:last-child td{border-bottom:none}
-th{background:var(--soft2);font-weight:800;color:var(--g1);font-size:12px}
 
-/* lesson nav */
-.lesson-nav{display:flex;align-items:center;justify-content:space-between;gap:var(--s8);margin-top:var(--s20)}
-.lesson-nav .nav-btn{display:inline-flex;align-items:center;gap:var(--s4);min-height:42px;padding:0 var(--s16);
-  border-radius:var(--r12);font-size:13px;font-weight:800;transition:filter .15s}
-.lesson-nav .nav-btn:active{filter:brightness(.94)}
-.lesson-nav .nav-btn.pri{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(124,58,237,.3)}
-.lesson-nav .nav-btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--text)}
-.lesson-nav .nav-btn:disabled{opacity:.4}
-.lesson-nav .dots{display:flex;gap:var(--s4);align-items:center}
-.lesson-nav .dot{width:7px;height:7px;border-radius:99px;background:var(--line)}
-.lesson-nav .dot.on{background:var(--g1);width:18px}
+/* 对比表（讲解页用） */
+.lt-wrap{overflow-x:auto;margin:var(--s16) 0;border-radius:var(--r12);
+  border:1px solid var(--line);background:#FAFAFB}
+.lt{width:100%;border-collapse:collapse;font-size:13.5px}
+.lt th{background:#F5F3FF;color:var(--g1);font-weight:800;font-size:12px;
+  padding:var(--s10) var(--s12);text-align:left;border-bottom:1px solid var(--line)}
+.lt td{padding:var(--s10) var(--s12);text-align:left;border-bottom:1px solid var(--line);
+  color:#374151}
+.lt tr:last-child td{border-bottom:none}
+.lt .lt-v{font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+/* lesson nav: 分页点 + 上一节白胶囊 + 橙色继续 */
+.lnav{margin-top:var(--s20)}
+.lnav .dots{display:flex;justify-content:center;gap:var(--s6);margin-bottom:var(--s16)}
+.lnav .dot{width:7px;height:7px;border-radius:99px;background:#E6E1F7;transition:all .2s}
+.lnav .dot.on{background:var(--g1);width:18px}
+.lnav .nav-row{display:flex;align-items:center;justify-content:space-between;gap:var(--s12)}
+.lnav .nav-prev{display:inline-flex;align-items:center;gap:6px;min-height:46px;
+  padding:0 var(--s20);border-radius:99px;background:#fff;border:1.5px solid #FED7AA;
+  color:var(--text);font-size:13.5px;font-weight:700;flex:none}
+.lnav .nav-prev:active{background:#FFF7ED}
+.lnav .nav-prev:disabled{opacity:.4}
+.lnav .nav-next{display:inline-flex;align-items:center;gap:6px;min-height:46px;
+  padding:0 var(--s24);border-radius:99px;background:var(--accent);color:#fff;
+  font-size:13.5px;font-weight:800;flex:1;justify-content:center;
+  box-shadow:0 6px 16px rgba(249,115,22,.35)}
+.lnav .nav-next:active{transform:translateY(1px);box-shadow:0 3px 10px rgba(249,115,22,.4)}
 
 .toc-item{display:flex;align-items:center;gap:var(--s8);width:100%;text-align:left;padding:var(--s12) var(--s16);
   background:var(--card);border:1px solid var(--line);border-radius:var(--r12);margin-bottom:var(--s6);
@@ -217,13 +241,15 @@ th{background:var(--soft2);font-weight:800;color:var(--g1);font-size:12px}
 .qcard h3{font-size:17px;font-weight:800;margin:0 0 var(--s8);line-height:1.5}
 .qcase{background:var(--soft2);border-radius:var(--r12);padding:var(--s12) var(--s16);
   font-size:13.5px;color:#3A2F6B;margin-bottom:var(--s16);border-left:3px solid var(--g1)}
-.opts{display:flex;flex-direction:column;gap:var(--s8);margin:var(--s16) 0}
-.opt{display:flex;align-items:center;gap:var(--s12);min-height:54px;padding:var(--s12) var(--s16);
-  border:1.5px solid var(--line);border-radius:var(--r12);font-size:14.5px;text-align:left;background:#fff;font-weight:600;transition:all .15s}
+.opts{display:flex;flex-direction:column;gap:var(--s10);margin:var(--s12) 0}
+.opt{display:flex;align-items:center;gap:var(--s12);min-height:56px;padding:var(--s12) var(--s16);
+  border:1.5px solid var(--line);border-radius:var(--r16);font-size:14.5px;text-align:left;
+  background:#fff;font-weight:600;color:var(--text);transition:all .15s;width:100%}
 .opt:active{background:var(--soft2)}
-.opt .key{width:28px;height:28px;border-radius:var(--r8);background:var(--soft);display:grid;
-  place-items:center;font-family:var(--mono);font-size:12px;font-weight:800;color:var(--g1);flex:none}
-.opt.sel{border-color:var(--g1);background:var(--soft2);box-shadow:0 0 0 3px rgba(124,58,237,.1)}
+.opt .key{width:30px;height:30px;border-radius:50%;background:var(--soft);
+  display:grid;place-items:center;font-family:var(--mono);font-size:13px;font-weight:800;
+  color:var(--g1);flex:none}
+.opt.sel{border-color:var(--g1);background:var(--soft2);box-shadow:0 0 0 3px rgba(124,58,237,.08)}
 .opt.sel .key{background:var(--g1);color:#fff}
 .opt.right{border-color:var(--ok);background:#DCFCE7}
 .opt.right .key{background:var(--ok);color:#fff}
@@ -234,19 +260,34 @@ th{background:var(--soft2);font-weight:800;color:var(--g1);font-size:12px}
   padding:var(--s12) var(--s16);font-family:var(--font);font-size:14.5px;resize:vertical;background:#fff;color:var(--text);font-weight:600}
 .ta:focus{outline:none;border-color:var(--g1)}
 
-.feedback{margin-top:var(--s16);padding:var(--s12) var(--s16);border-radius:var(--r12);font-size:13.5px;line-height:1.6;font-weight:600}
-.fb-ok{background:#DCFCE7;color:#166534}
-.fb-no{background:#FEE2E2;color:#991B1B}
-.fb-info{background:var(--soft2);color:#5B21B6}
-.feedback b{display:block;margin-bottom:var(--s4);font-weight:800;font-size:14px}
-.hint{font-size:13px;color:var(--muted);background:var(--soft2);border-radius:var(--r8);
-  padding:var(--s8) var(--s12);margin-top:var(--s8);font-weight:600}
+/* ❌ 没答对（闯关页用） */
+.fb-no{background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--r12);
+  padding:var(--s12) var(--s16);margin-top:var(--s12);font-size:13px;
+  color:#991B1B;line-height:1.65}
+.fb-no b{color:#7F1D1D;display:block;margin-bottom:6px;font-weight:800;font-size:13px}
+.fb-ok{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:var(--r12);
+  padding:var(--s12) var(--s16);margin-top:var(--s12);font-size:13px;
+  color:#166534;line-height:1.65}
+.fb-ok b{color:#14532D;display:block;margin-bottom:6px;font-weight:800;font-size:13px}
+.fb-info{background:#F5F3FF;border:1px solid #DDD6FE;border-radius:var(--r12);
+  padding:var(--s12) var(--s16);margin-top:var(--s12);font-size:13px;
+  color:#5B21B6;line-height:1.65}
+.fb-info b{color:#4C1D95;display:block;margin-bottom:6px;font-weight:800;font-size:13px}
 
-.score-strip{display:flex;align-items:center;justify-content:space-between;
-  background:linear-gradient(135deg,var(--soft2),#F3E8FF);border-radius:var(--r12);
+/* 💡 提示（闯关页用） */
+.qtip{background:linear-gradient(135deg,#FEF9E7,#FEF3C7);border:1px solid #FDE68A;
+  border-radius:var(--r12);padding:var(--s12) var(--s16);margin-top:var(--s12);
+  font-size:13px;color:#7C2D12;line-height:1.65}
+.qtip .hd{color:#92400E;display:block;margin-bottom:6px;font-weight:800;font-size:13px}
+.hint{font-size:13px;color:var(--muted);background:var(--soft2);border-radius:var(--r8);
+  padding:var(--s8) var(--s12);margin-top:var(--s12);font-weight:600}
+
+/* 本卷得分（闯关页用） */
+.qscore{display:flex;align-items:center;justify-content:space-between;
+  background:#F5F3FF;border:1px solid #DDD6FE;border-radius:var(--r12);
   padding:var(--s12) var(--s16);margin-top:var(--s16)}
-.score-strip .lab{font-size:12px;color:var(--muted);font-weight:700}
-.score-strip .val{font-family:var(--mono);font-size:18px;font-weight:800;color:var(--g1)}
+.qscore .qlab{font-size:13px;color:var(--muted);font-weight:700}
+.qscore .qval{font-family:var(--mono);font-size:18px;font-weight:800;color:var(--g1)}
 
 /* ====== buttons row ====== */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s8);min-height:48px;
@@ -361,6 +402,30 @@ th{background:var(--soft2);font-weight:800;color:var(--g1);font-size:12px}
 .cv-foot{text-align:center;font-size:11px;opacity:.78;margin-top:var(--s12);font-weight:600;letter-spacing:.5px}
 body.cover-mode header.top{display:none}
 body.cover-mode .wrap{padding:0;max-width:none}
+body.view-mode-lesson header.top,
+body.view-mode-quiz header.top{display:none}
+
+/* ====== subhead (lesson / quiz) ====== */
+.subhead{position:sticky;top:0;z-index:30;background:var(--grad);color:#fff;
+  padding-top:env(safe-area-inset-top);box-shadow:0 4px 12px rgba(124,58,237,.18)}
+.sub-in{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:var(--s12);
+  padding:var(--s12) var(--s16)}
+.sub-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.18);
+  display:grid;place-items:center;color:#fff;font-size:18px;font-weight:700;
+  backdrop-filter:blur(4px);flex:none;transition:background .15s}
+.sub-btn:active{background:rgba(255,255,255,.32)}
+.sub-titles{flex:1;text-align:center;min-width:0}
+.sub-titles .t1{font-size:15px;font-weight:800;line-height:1.25;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub-titles .t2{font-size:11px;opacity:.85;font-weight:600;margin-top:3px;
+  font-family:var(--mono);letter-spacing:.5px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub-pgs{background:rgba(255,255,255,.22);color:#fff;padding:6px 12px;border-radius:99px;
+  font-family:var(--mono);font-size:12px;font-weight:800;flex:none;backdrop-filter:blur(4px)}
+.sub-pgs b{font-size:14px}
+.sub-menu{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.18);
+  display:grid;place-items:center;color:#fff;font-size:18px;flex:none}
+.sub-menu:active{background:rgba(255,255,255,.32)}
 </style>
 </head>
 <body>
@@ -428,6 +493,7 @@ const COURSES = [
     lesson:{
       kicker:'第 1 章 · 入门',
       title:'AI 基础与全貌',
+      minutes:5,
       pages:[
         {title:'AI 的一句话定义', blocks:[
           {h:'什么是 AI', p:'AI（人工智能，Artificial Intelligence）= 让机器完成"通常需要人类智能"的任务的方法集合。注意关键词——<b>方法集合</b>，不是一个具体的东西，而是一大类技术的统称。'},
@@ -494,6 +560,7 @@ const COURSES = [
     lesson:{
       kicker:'第 2 章 · 进阶',
       title:'大模型是怎么"学会说话"的',
+      minutes:8,
       pages:[
         {title:'什么是大模型', blocks:[
           {h:'定义', p:'大模型（LLM，Large Language Model）= 用海量文本训练出来的超大神经网络，核心能力是<b>预测下一个 token</b>。它"说话"其实是逐 token 概率生成。'},
@@ -570,6 +637,7 @@ const COURSES = [
     lesson:{
       kicker:'第 3 章 · 实战',
       title:'让 AI 从"会聊"到"会干活"',
+      minutes:6,
       pages:[
         {title:'Agent 是什么', blocks:[
           {h:'定义', p:'Agent（智能体）= 以大模型为大脑，配上<b>工具调用、记忆、规划</b>，能自主完成多步任务的系统。'},
@@ -658,6 +726,7 @@ const COURSES = [
     lesson:{
       kicker:'第 4 章 · 实战',
       title:'Prompt 工程：跟 AI 说话的艺术',
+      minutes:7,
       pages:[
         {title:'Prompt 为什么重要', blocks:[
           {h:'什么是 Prompt', p:'Prompt（提示词）= 你给大模型的输入指令。同样一个模型，提示词写得好和写得差，结果天差地别。'},
@@ -734,6 +803,7 @@ const COURSES = [
     lesson:{
       kicker:'第 5 章 · 进阶应用',
       title:'RAG：给大模型装上"你的知识库"',
+      minutes:6,
       pages:[
         {title:'为什么需要 RAG', blocks:[
           {h:'大模型的知识盲区', p:'大模型的知识来自训练数据，有两大问题：①<b>截止日期</b>——训练后的新事它不知道 ②<b>私有数据</b>——你公司内部文档、个人笔记，它训练时没见过。'},
@@ -932,6 +1002,7 @@ function goHome(fromCover){
 
 /* ---------- render home ---------- */
 function renderHome(){
+  document.body.classList.remove('view-mode-lesson','view-mode-quiz');
   view={name:'home'};
   topRender();
   const a=document.getElementById('app');
@@ -1050,44 +1121,67 @@ function openChapter(id,page){
 function renderLesson(){
   const c=curCh();if(!c)return;
   const pg=c.lesson.pages[view.page];if(!pg)return;
+  document.body.classList.add('view-mode-lesson');
+  document.body.classList.remove('view-mode-quiz');
+  const ci=COURSES.findIndex(x=>x.id===c.id)+1;
+  const total=c.lesson.pages.length;
   // mark page read, award xp first time
   const p=chP(c.id);
   if(!p.readPages.includes(view.page)){p.readPages.push(view.page);addXp(2);dstat().pages++;}
   topRender();
   const a=document.getElementById('app');
-  let h=`<button class="back" onclick="openLibrary()">‹ 返回</button>`;
-  h+=`<div class="lesson"><div class="kicker">${c.lesson.kicker}</div><h2>${c.lesson.title}</h2>`;
-  h+=`<div class="page-bar"><span class="pgs">第 <b>${view.page+1}</b> / ${c.lesson.pages.length} 页</span>`;
-  h+=`<button class="toc-btn" onclick="openToc()">☰ 目录</button></div>`;
-  h+=`<div class="page-title">${pg.title}</div>`;
+  // subhead: ← + 居中两行标题 + 右上 进度chip
+  let h=`<div class="subhead"><div class="sub-in">`;
+  h+=`<button class="sub-btn" onclick="openLibrary()" aria-label="返回">‹</button>`;
+  h+=`<div class="sub-titles"><div class="t1">${c.lesson.title}</div>`;
+  h+=`<div class="t2">第 ${ci} 章 · 第 ${view.page+1} 节 · 约 ${c.lesson.minutes||5} 分钟</div></div>`;
+  h+=`<button class="sub-pgs" onclick="openToc()" title="目录"><b>${view.page+1}</b>/${total}</button>`;
+  h+=`</div></div>`;
+
+  // lesson card
+  h+=`<div class="lcard lesson">`;
+  h+=`<div class="kicker">${c.lesson.kicker}</div>`;
+  h+=`<h2>${pg.title}</h2>`;
+  h+=`<div class="l-meta">`;
+  h+=`<span class="i">🔖 <b>约 ${c.lesson.minutes||5}</b> 分钟阅读</span>`;
+  h+=`<span class="i">📖 阅读模式</span>`;
+  h+=`</div>`;
   h+=`<div class="lesson-body">`;
   pg.blocks.forEach(b=>{
     if(b.h)h+=`<h4>${b.h}</h4>`;
     if(b.p)h+=`<p>${b.p}</p>`;
     if(b.ul){h+=`<ul>`;b.ul.forEach(x=>h+=`<li>${x}</li>`);h+=`</ul>`;}
     if(b.ol){h+=`<ol>`;b.ol.forEach(x=>h+=`<li>${x}</li>`);h+=`</ol>`;}
-    if(b.note)h+=`<div class="note">${b.note}</div>`;
+    if(b.note){
+      const isWarn=b.note.indexOf('⚠️')===0||b.note.indexOf('注意')===0;
+      const cls=isWarn?'warn':'tip';
+      h+=`<div class="${cls}">${b.note}</div>`;
+    }
     if(b.code)h+=`<div class="code-block">${escapeHtml(b.code)}</div>`;
-    if(b.table){const t=b.table;h+=`<div class="table-wrap"><table><tr>`;
+    if(b.table){const t=b.table;h+=`<div class="lt-wrap"><table class="lt"><tr>`;
       t.head.forEach(x=>h+=`<th>${x}</th>`);h+=`</tr>`;
       t.rows.forEach(r=>{h+=`<tr>`;r.forEach(x=>h+=`<td>${x}</td>`);h+=`</tr>`;});
       h+=`</table></div>`;}
   });
   h+=`</div>`;
 
-  const total=c.lesson.pages.length,isLast=view.page>=total-1;
-  h+=`<div class="lesson-nav">`;
-  h+=`<button class="nav-btn ghost" ${view.page>0?`onclick="jumpPage(${view.page-1})"`:'disabled'}>‹ 上一页</button>`;
+  // nav: dots + 上一节白胶囊 + 橙色继续
+  const isLast=view.page>=total-1;
+  h+=`<div class="lnav">`;
   h+=`<div class="dots">`;
   for(let d=0;d<total;d++){h+=`<span class="dot ${d===view.page?'on':''}"></span>`;}
   h+=`</div>`;
+  h+=`<div class="nav-row">`;
+  h+=`<button class="nav-prev" ${view.page>0?`onclick="jumpPage(${view.page-1})"`:'disabled'}>‹ 上一节</button>`;
   if(!isLast){
-    h+=`<button class="nav-btn pri" onclick="jumpPage(${view.page+1})">下一页 ›</button>`;
+    h+=`<button class="nav-next" onclick="jumpPage(${view.page+1})">继续 ›</button>`;
   }else{
-    h+=`<button class="nav-btn pri" onclick="startQuiz('${c.id}')">${p.passed?'重新闯关':'开始闯关'} ›</button>`;
+    h+=`<button class="nav-next" onclick="startQuiz('${c.id}')">${p.passed?'重新闯关':'开始闯关'} ›</button>`;
   }
   h+=`</div></div>`;
+  h+=`</div>`;  // close lcard
 
+  // 最后一页：下一章 或 全部通关（与原结构对齐）
   if(isLast){
     const ni=COURSES.findIndex(x=>x.id===c.id)+1;
     h+=`<div class="row">`;
@@ -1136,13 +1230,24 @@ function curQ(){return view.pool[view.qi]?view.pool[view.qi].q:null;}
 
 function renderQ(){
   const q=curQ();if(!q)return finish();
+  document.body.classList.add('view-mode-quiz');
+  document.body.classList.remove('view-mode-lesson');
   topRender();
   const total=view.pool.length;
+  const isExam=view.mode==='exam';
   const a=document.getElementById('app');
-  let h=`<button class="back" onclick="confirmBack()">‹ ${view.mode==='exam'?'返回选题':(view.ret==='lesson'?'返回讲解':'返回闯关')}</button>`;
-  h+=`<div class="qcard">
-    <div class="qmeta"><span class="qtype">${TYPE_LABEL[q.type]}</span><span>${view.qi+1} / ${total} · ${view.mode==='exam'?'考试':'闯关'}</span></div>
-    <h3>${q.q}</h3>`;
+  const ci=isExam?'综合':((COURSES.findIndex(x=>x.id===view.cid))+1);
+  // subhead
+  let h=`<div class="subhead"><div class="sub-in">`;
+  h+=`<button class="sub-btn" onclick="confirmBack()" aria-label="返回">‹</button>`;
+  h+=`<div class="sub-titles"><div class="t1">${isExam?'考试模式':'闯关模式'}</div>`;
+  h+=`<div class="t2">${isExam?`共 ${total} 题 · 不计时`:`第 ${ci} 章 · 抽 ${total} 题 · 不计时`}</div></div>`;
+  h+=`<button class="sub-pgs"><b>${view.qi+1}</b>/${total}</button>`;
+  h+=`</div></div>`;
+
+  h+=`<div class="lcard qcard">`;
+  h+=`<div class="qmeta"><span class="qtype">${TYPE_LABEL[q.type]}</span><span class="qpgs">${view.qi+1}/${total} · ${isExam?'考试':'闯关'}</span></div>`;
+  h+=`<h3>${q.q}</h3>`;
   if(q.case)h+=`<div class="qcase">${q.case}</div>`;
 
   if(q.type==='prompt'){
@@ -1165,6 +1270,7 @@ function renderQ(){
         <span class="key">${String.fromCharCode(65+i)}</span><span>${o}</span></button>`;
     });
     h+=`</div>`;
+    if(view.hintQ&&q.hint)h+=`<div class="qtip"><span class="hd">💡 提示</span>${q.hint}</div>`;
     if(view.answered){
       const correct=checkAns(q);
       h+=`<div class="feedback ${correct?'fb-ok':'fb-no'}"><b>${correct?'答对了！':'没答对'}</b>${q.exp? q.exp : (correct?'稳。':'再想想，可重试。')}</div>`;
@@ -1173,9 +1279,9 @@ function renderQ(){
       h+=`<div class="row"><button class="btn btn-ghost" onclick="toggleHint()">提示</button><button class="btn btn-pri" onclick="submitAns()">提交答案</button></div>`;
     }
   }
-  if(view.hintQ&&q.hint)h+=`<div class="hint">💡 ${q.hint}</div>`;
-  if(view.hintQ&&q.type==='prompt')h+=`<div class="hint">💡 好的提示词通常含：角色、可用工具/约束、分步要求、验证/汇报。</div>`;
-  h+=`<div class="score-strip"><span class="lab">本卷得分</span><span class="val">${view.score} / ${total}</span></div>`;
+  if(view.hintQ&&q.type==='prompt')h+=`<div class="qtip"><span class="hd">💡 提示</span>好的提示词通常含：角色、可用工具/约束、分步要求、验证/汇报。</div>`;
+  // 本卷得分（永远显示）
+  h+=`<div class="qscore"><span class="qlab">本卷得分</span><span class="qval">${view.score} / ${total}</span></div>`;
   h+=`</div>`;
   a.innerHTML=h;window.scrollTo(0,0);
 }
@@ -1403,6 +1509,14 @@ document.querySelectorAll('[data-close]').forEach(el=>el.onclick=closeSheet);
 document.querySelectorAll('[data-close-toc]').forEach(el=>el.onclick=closeToc);
 
 if(localStorage.getItem('ai_learn_seen_cover')==='1'){renderHome();}else{renderCover();}
+
+// dev hook: ?dev=lesson|quiz|home 直接进入（调试用）
+try{
+  const dev=new URLSearchParams(location.search).get('dev');
+  if(dev==='lesson')openChapter(COURSES[0].id,0);
+  else if(dev==='quiz')startQuiz(COURSES[0].id);
+  else if(dev==='home')renderHome();
+}catch(e){}
 
 // PWA: register service worker for offline / install support
 if('serviceWorker' in navigator){
