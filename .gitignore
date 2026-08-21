@@ -1,0 +1,4 @@
+.workbuddy/
+generated-images/
+*.log
+.DS_Store

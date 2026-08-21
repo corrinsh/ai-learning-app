@@ -321,6 +321,36 @@ th{background:var(--soft2);font-weight:800;color:var(--g1);font-size:12px}
 .foot{text-align:center;color:var(--muted);font-size:11px;margin-top:var(--s24);padding-bottom:var(--s16);font-weight:600}
 .foot b{color:var(--g1);font-family:var(--mono)}
 @media(max-width:380px){.hero h1{font-size:19px}.lesson h2{font-size:18px}.ch-actions{flex-direction:column}}
+
+/* ====== cover (ardot 01) ====== */
+.cover{min-height:100vh;background:var(--grad);color:#fff;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;padding:0 0 env(safe-area-inset-bottom)}
+.cover::before{content:'';position:absolute;left:-80px;top:-80px;width:280px;height:280px;
+  background:radial-gradient(circle,rgba(255,255,255,.18),transparent 65%);border-radius:50%;pointer-events:none}
+.cover::after{content:'';position:absolute;right:-100px;bottom:-100px;width:320px;height:320px;
+  background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);border-radius:50%;pointer-events:none}
+.cv-top{display:flex;align-items:center;gap:var(--s8);padding:var(--s16);position:relative;z-index:1}
+.cv-top .logo{width:36px;height:36px;border-radius:var(--r12);background:rgba(255,255,255,.22);
+  display:grid;place-items:center;font-weight:900;font-size:14px;backdrop-filter:blur(6px);letter-spacing:.5px}
+.cv-top b{font-size:16px;font-weight:800;letter-spacing:.5px}
+.cv-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 var(--s24);
+  position:relative;z-index:1}
+.cv-hero{font-size:48px;font-weight:900;line-height:1.05;letter-spacing:1px;margin:0 0 var(--s12);
+  text-shadow:0 4px 20px rgba(0,0,0,.12)}
+.cv-hero span{display:block}
+.cv-sub{font-size:15px;opacity:.92;margin:0 0 var(--s32);font-weight:600;letter-spacing:.5px}
+.cv-stats{display:flex;gap:var(--s16);margin-bottom:var(--s32);flex-wrap:wrap}
+.cv-st{display:flex;flex-direction:column;gap:2px;min-width:64px}
+.cv-st b{font-size:28px;font-weight:900;font-family:var(--mono);letter-spacing:-1px;line-height:1}
+.cv-st span{font-size:11px;opacity:.82;font-weight:700;letter-spacing:.5px}
+.cv-bottom{padding:0 var(--s24) var(--s24);position:relative;z-index:1}
+.cv-cta{display:block;width:100%;background:var(--accent);color:#fff;font-weight:900;font-size:16px;
+  padding:18px 0;border-radius:var(--r16);text-align:center;box-shadow:0 8px 24px rgba(234,88,12,.45);
+  transition:transform .1s,box-shadow .15s;letter-spacing:1px}
+.cv-cta:active{transform:translateY(1px);box-shadow:0 4px 12px rgba(234,88,12,.4)}
+.cv-foot{text-align:center;font-size:11px;opacity:.78;margin-top:var(--s12);font-weight:600;letter-spacing:.5px}
+body.cover-mode header.top{display:none}
+body.cover-mode .wrap{padding:0;max-width:none}
 </style>
 </head>
 <body>
@@ -860,6 +890,36 @@ function sampleExam(){
 }
 function topicsOf(c){return [...new Set(c.quiz.map(q=>q.tp))];}
 
+/* ---------- render cover (ardot 01) ---------- */
+function totalQuiz(){let n=0;COURSES.forEach(c=>n+=c.quiz.length);return n;}
+function renderCover(){
+  view={name:'cover'};
+  document.body.classList.add('cover-mode');
+  const a=document.getElementById('app');
+  const totalQ=totalQuiz();
+  a.innerHTML=`<div class="cover">
+    <div class="cv-top"><div class="logo">AI</div><b>AI学习工作台</b></div>
+    <div class="cv-body">
+      <h1 class="cv-hero"><span>AI学习</span><span>工作台</span></h1>
+      <p class="cv-sub">从入门到实战，${COURSES.length} 章带你搞懂 AI</p>
+      <div class="cv-stats">
+        <div class="cv-st"><b>${COURSES.length}</b><span>章节</span></div>
+        <div class="cv-st"><b>${totalQ}+</b><span>闯关题</span></div>
+        <div class="cv-st"><b>∞</b><span>重试</span></div>
+      </div>
+    </div>
+    <div class="cv-bottom">
+      <button class="cv-cta" onclick="goHome(true)">开始学习 →</button>
+      <div class="cv-foot">进度自动保存 · 支持导入导出</div>
+    </div>
+  </div>`;
+}
+function goHome(fromCover){
+  document.body.classList.remove('cover-mode');
+  if(fromCover){try{localStorage.setItem('ai_learn_seen_cover','1');}catch(e){}}
+  renderHome();
+}
+
 /* ---------- render home ---------- */
 function renderHome(){
   view={name:'home'};
@@ -1332,7 +1392,7 @@ document.getElementById('resetBtn').onclick=resetProg;
 document.querySelectorAll('[data-close]').forEach(el=>el.onclick=closeSheet);
 document.querySelectorAll('[data-close-toc]').forEach(el=>el.onclick=closeToc);
 
-renderHome();
+if(localStorage.getItem('ai_learn_seen_cover')==='1'){renderHome();}else{renderCover();}
 </script>
 </body>
 </html>
